@@ -28,15 +28,6 @@
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
-			this.Trash = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.NameFirst = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.NameLast = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.UMID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.Uniqname = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ItemCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.ItemDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.DueDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.CheckOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.label_Title = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label_Reminder = new System.Windows.Forms.Label();
@@ -53,7 +44,17 @@
 			this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.button_CheckIn = new System.Windows.Forms.Button();
+			this.Trash = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.NameFirst = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.NameLast = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.UMID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.Uniqname = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ItemCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.ItemDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DueDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.CheckOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.button_Remove = new System.Windows.Forms.Button();
+			this.label_TimeRemind = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.groupBox1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
@@ -63,7 +64,6 @@
 			// 
 			this.dataGridView1.AllowUserToAddRows = false;
 			this.dataGridView1.AllowUserToDeleteRows = false;
-			this.dataGridView1.AllowUserToResizeColumns = false;
 			this.dataGridView1.AllowUserToResizeRows = false;
 			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -93,82 +93,16 @@
 			this.dataGridView1.Size = new System.Drawing.Size(871, 363);
 			this.dataGridView1.TabIndex = 0;
 			this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+			this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
 			this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
-			// 
-			// Trash
-			// 
-			this.Trash.HeaderText = "";
-			this.Trash.Name = "Trash";
-			this.Trash.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.Trash.Width = 25;
-			// 
-			// NameFirst
-			// 
-			this.NameFirst.HeaderText = "Name (First)";
-			this.NameFirst.Name = "NameFirst";
-			this.NameFirst.ReadOnly = true;
-			this.NameFirst.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// NameLast
-			// 
-			this.NameLast.HeaderText = "Name (Last)";
-			this.NameLast.Name = "NameLast";
-			this.NameLast.ReadOnly = true;
-			this.NameLast.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// UMID
-			// 
-			this.UMID.HeaderText = "UMID";
-			this.UMID.Name = "UMID";
-			this.UMID.ReadOnly = true;
-			this.UMID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.UMID.Width = 70;
-			// 
-			// Uniqname
-			// 
-			this.Uniqname.HeaderText = "Uniqname";
-			this.Uniqname.Name = "Uniqname";
-			this.Uniqname.ReadOnly = true;
-			this.Uniqname.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.Uniqname.Width = 80;
-			// 
-			// ItemCat
-			// 
-			this.ItemCat.HeaderText = "Item Category";
-			this.ItemCat.Name = "ItemCat";
-			this.ItemCat.ReadOnly = true;
-			this.ItemCat.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.ItemCat.Width = 120;
-			// 
-			// ItemDesc
-			// 
-			this.ItemDesc.HeaderText = "Item Description";
-			this.ItemDesc.Name = "ItemDesc";
-			this.ItemDesc.ReadOnly = true;
-			this.ItemDesc.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.ItemDesc.Width = 130;
-			// 
-			// DueDate
-			// 
-			this.DueDate.HeaderText = "Due Date";
-			this.DueDate.Name = "DueDate";
-			this.DueDate.ReadOnly = true;
-			this.DueDate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// CheckOut
-			// 
-			this.CheckOut.HeaderText = "Staff Out";
-			this.CheckOut.Name = "CheckOut";
-			this.CheckOut.ReadOnly = true;
-			this.CheckOut.Resizable = System.Windows.Forms.DataGridViewTriState.False;
 			// 
 			// label_Title
 			// 
 			this.label_Title.Font = new System.Drawing.Font("Impact", 40F);
 			this.label_Title.ForeColor = System.Drawing.Color.Yellow;
-			this.label_Title.Location = new System.Drawing.Point(131, 24);
+			this.label_Title.Location = new System.Drawing.Point(250, 24);
 			this.label_Title.Name = "label_Title";
-			this.label_Title.Size = new System.Drawing.Size(634, 76);
+			this.label_Title.Size = new System.Drawing.Size(396, 76);
 			this.label_Title.TabIndex = 1;
 			this.label_Title.Text = "Lending Library";
 			this.label_Title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -198,8 +132,6 @@
 			this.label_Reminder.Name = "label_Reminder";
 			this.label_Reminder.Size = new System.Drawing.Size(859, 20);
 			this.label_Reminder.TabIndex = 8;
-			this.label_Reminder.Text = "Overdue Label";
-			this.label_Reminder.Visible = false;
 			// 
 			// label_CheckOut
 			// 
@@ -291,32 +223,109 @@
             this.historyToolStripMenuItem,
             this.helpToolStripMenuItem});
 			this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-			this.infoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
-			this.infoToolStripMenuItem.Text = "Info";
+			this.infoToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+			this.infoToolStripMenuItem.Text = "Misc";
 			// 
 			// historyToolStripMenuItem
 			// 
 			this.historyToolStripMenuItem.Name = "historyToolStripMenuItem";
-			this.historyToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.historyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.historyToolStripMenuItem.Text = "History";
 			this.historyToolStripMenuItem.Click += new System.EventHandler(this.historyToolStripMenuItem_Click);
 			// 
 			// helpToolStripMenuItem
 			// 
 			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.helpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.helpToolStripMenuItem.Text = "Help";
 			this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
 			// 
-			// button_CheckIn
+			// Trash
 			// 
-			this.button_CheckIn.Location = new System.Drawing.Point(771, 74);
-			this.button_CheckIn.Name = "button_CheckIn";
-			this.button_CheckIn.Size = new System.Drawing.Size(113, 23);
-			this.button_CheckIn.TabIndex = 8;
-			this.button_CheckIn.Text = "Check In";
-			this.button_CheckIn.UseVisualStyleBackColor = true;
-			this.button_CheckIn.Click += new System.EventHandler(this.button_CheckIn_Click);
+			this.Trash.HeaderText = "";
+			this.Trash.Name = "Trash";
+			this.Trash.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.Trash.Text = "In";
+			this.Trash.Width = 25;
+			// 
+			// NameFirst
+			// 
+			this.NameFirst.HeaderText = "Name (First)";
+			this.NameFirst.Name = "NameFirst";
+			this.NameFirst.ReadOnly = true;
+			this.NameFirst.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// NameLast
+			// 
+			this.NameLast.HeaderText = "Name (Last)";
+			this.NameLast.Name = "NameLast";
+			this.NameLast.ReadOnly = true;
+			this.NameLast.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// UMID
+			// 
+			this.UMID.HeaderText = "UMID";
+			this.UMID.Name = "UMID";
+			this.UMID.ReadOnly = true;
+			this.UMID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.UMID.Width = 70;
+			// 
+			// Uniqname
+			// 
+			this.Uniqname.HeaderText = "Uniqname";
+			this.Uniqname.Name = "Uniqname";
+			this.Uniqname.ReadOnly = true;
+			this.Uniqname.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.Uniqname.Width = 80;
+			// 
+			// ItemCat
+			// 
+			this.ItemCat.HeaderText = "Item Category";
+			this.ItemCat.Name = "ItemCat";
+			this.ItemCat.ReadOnly = true;
+			this.ItemCat.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.ItemCat.Width = 120;
+			// 
+			// ItemDesc
+			// 
+			this.ItemDesc.HeaderText = "Item Description";
+			this.ItemDesc.Name = "ItemDesc";
+			this.ItemDesc.ReadOnly = true;
+			this.ItemDesc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.ItemDesc.Width = 130;
+			// 
+			// DueDate
+			// 
+			this.DueDate.HeaderText = "Due Date";
+			this.DueDate.Name = "DueDate";
+			this.DueDate.ReadOnly = true;
+			this.DueDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// CheckOut
+			// 
+			this.CheckOut.HeaderText = "Staff Out";
+			this.CheckOut.Name = "CheckOut";
+			this.CheckOut.ReadOnly = true;
+			this.CheckOut.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// button_Remove
+			// 
+			this.button_Remove.Location = new System.Drawing.Point(131, 74);
+			this.button_Remove.Name = "button_Remove";
+			this.button_Remove.Size = new System.Drawing.Size(113, 23);
+			this.button_Remove.TabIndex = 8;
+			this.button_Remove.Text = "Remove";
+			this.button_Remove.UseVisualStyleBackColor = true;
+			this.button_Remove.Click += new System.EventHandler(this.button_Remove_Click);
+			// 
+			// label_TimeRemind
+			// 
+			this.label_TimeRemind.Location = new System.Drawing.Point(652, 33);
+			this.label_TimeRemind.Name = "label_TimeRemind";
+			this.label_TimeRemind.Size = new System.Drawing.Size(232, 64);
+			this.label_TimeRemind.TabIndex = 9;
+			this.label_TimeRemind.Text = "Please make sure that the Current Time and Date is correct.";
+			this.label_TimeRemind.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// Form1
 			// 
@@ -324,7 +333,8 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.ClientSize = new System.Drawing.Size(897, 613);
-			this.Controls.Add(this.button_CheckIn);
+			this.Controls.Add(this.label_TimeRemind);
+			this.Controls.Add(this.button_Remove);
 			this.Controls.Add(this.button_CheckOut);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label_Title);
@@ -337,6 +347,8 @@
 			this.MaximizeBox = false;
 			this.Name = "Form1";
 			this.Text = "Lending Library";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+			this.Load += new System.EventHandler(this.Form1_Load);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.groupBox1.ResumeLayout(false);
 			this.menuStrip1.ResumeLayout(false);
@@ -364,7 +376,8 @@
 		private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem historyToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn Trash;
+		private System.Windows.Forms.Label label_Reminder;
+		private System.Windows.Forms.DataGridViewButtonColumn Trash;
 		private System.Windows.Forms.DataGridViewTextBoxColumn NameFirst;
 		private System.Windows.Forms.DataGridViewTextBoxColumn NameLast;
 		private System.Windows.Forms.DataGridViewTextBoxColumn UMID;
@@ -373,8 +386,8 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn ItemDesc;
 		private System.Windows.Forms.DataGridViewTextBoxColumn DueDate;
 		private System.Windows.Forms.DataGridViewTextBoxColumn CheckOut;
-		private System.Windows.Forms.Button button_CheckIn;
-		private System.Windows.Forms.Label label_Reminder;
+		private System.Windows.Forms.Button button_Remove;
+		private System.Windows.Forms.Label label_TimeRemind;
 	}
 }
 

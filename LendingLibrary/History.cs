@@ -12,16 +12,33 @@ namespace LendingLibrary
 {
 	public partial class History : Form
 	{
-		private bool button_clicked = false;
-
 		public History() {
 			InitializeComponent();
 		}
 
-		#region Dialog Functions to Prompt Form
+		#region Functions
 
-		public void NewDialog() {
+		public void History_Dialog() {
+			foreach (Form1.Item PastItem in Form1.HistoryItems) {
+				dataGridView1.Rows.Add(PastItem.nameFirst, PastItem.nameLast, PastItem.UMID, PastItem.uniq,
+					PastItem.itemCat, PastItem.itemDesc, PastItem.dueDate, PastItem.staffOut, PastItem.checkInTime, 
+					PastItem.staffIn);
+			}
+			dataGridView1.ClearSelection();
+			ShowDialog();
+		}
 
+		private void Empty_All_Labels() {
+			label_FirstName.Text = "Name (First): ";
+			label_NameLast.Text = "Name (Last): ";
+			label_UMID.Text = "UMID: ";
+			label_Uniq.Text = "Uniqname: ";
+			label_ItemCat.Text = "Item Category: ";
+			label_ItemDesc.Text = "Item Description: ";
+			label_DueDate.Text = "Due Date: ";
+			label_CheckOut.Text = "Checked Out By: ";
+			label_CheckIn.Text = "Check In Time: ";
+			label_StaffIn.Text = "Checked In By: ";
 		}
 
 		#endregion
@@ -30,11 +47,34 @@ namespace LendingLibrary
 
 		// Show Item Info
 		private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e) {
-
+			try {
+				DataGridView Grid = (DataGridView)sender;
+				DataGridViewRow Item = Grid.Rows[e.RowIndex];
+				label_FirstName.Text = "Name (First): " + Item.Cells[0].Value.ToString();
+				label_NameLast.Text = "Name (Last): " + Item.Cells[1].Value.ToString();
+				label_UMID.Text = "UMID: " + Item.Cells[2].Value.ToString();
+				label_Uniq.Text = "Uniqname: " + Item.Cells[3].Value.ToString();
+				label_ItemCat.Text = "Item Category: " + Item.Cells[4].Value.ToString();
+				label_ItemDesc.Text = "Item Description: " + Item.Cells[5].Value.ToString();
+				label_DueDate.Text = "Due Date: " + Item.Cells[6].Value.ToString();
+				label_CheckOut.Text = "Checked Out By: " + Item.Cells[7].Value.ToString();
+				label_CheckIn.Text = "Check In Time: " + Item.Cells[8].Value.ToString();
+				label_StaffIn.Text = "Checked In By: " + Item.Cells[9].Value.ToString();
+			}
+			catch { } // Used if resizing the columns
 		}
 
 		private void button_ClearHistory_Click(object sender, EventArgs e) {
-
+			MessageBoxText clearHist_Win = new MessageBoxText();
+			if (clearHist_Win.ClearHist_Dialog()) {
+				// This should have been updated in ClearHist_Dialog()
+				label_LastClear.Text = Form1.LastHistoryClear;
+				// Clear DataGridView and List
+				Form1.HistoryItems.Clear();
+				dataGridView1.Rows.Clear();
+				dataGridView1.Refresh();
+				Empty_All_Labels();
+			}
 		}
 
 		#endregion

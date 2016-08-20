@@ -19,18 +19,50 @@ namespace LendingLibrary
 			button_clicked = false;
 		}
 
+		private bool Is_Valid_Date(string DateStr) {
+			DateTime localTime = DateTime.Now;
+			string currDateStr = localTime.Date.ToString("d");
+			// [0] is month, [1] is day, [2] is year
+			string[] currDate = currDateStr.Split('/');
+			string[] dueDate = DateStr.Split('/');
+			if (int.Parse(dueDate[2]) < int.Parse(currDate[2])) {
+				numericUpDown_Year.BackColor = Color.LightCoral;
+				return false;
+			}
+			if (int.Parse(dueDate[0]) < int.Parse(currDate[0])) {
+				numericUpDown_Month.BackColor = Color.LightCoral;
+				return false;
+			}
+			if (int.Parse(dueDate[1]) < int.Parse(currDate[1])) {
+				numericUpDown_Day.BackColor = Color.LightCoral;
+				return false;
+			}
+			return true;
+		}
+
 		#region Functions
 
 		public void CheckOut_Dialog(ref DataGridView Main_Form) {
+			// Preset the Due Dates to the Current Date
+			DateTime localTime = DateTime.Now;
+			string currDateStr = localTime.Date.ToString("d");
+			// [0] is month, [1] is day, [2] is year
+			string[] currDate = currDateStr.Split('/');
+			numericUpDown_Month.Value = int.Parse(currDate[0]);
+			numericUpDown_Day.Value = int.Parse(currDate[1]);
+			numericUpDown_Year.Value = int.Parse(currDate[2]);
 			ShowDialog();
 			if (button_clicked) {
 				string Date_Str = Date_To_String((int)numericUpDown_Month.Value,
 					(int)numericUpDown_Day.Value, (int)numericUpDown_Year.Value);
 				// Add to DataGridView
-				Main_Form.Rows.Add(false, textBox_NameFirst.Text, 
+				DataGridViewButtonColumn button = new DataGridViewButtonColumn();
+				Main_Form.Rows.Add(button, textBox_NameFirst.Text,
 					textBox_NameLast.Text, textBox_UMID.Text, textBox_Uniq.Text,
 					comboBox_ItemCat.Text, textBox_ItemDesc.Text, Date_Str,
 					textBox_StaffOut.Text);
+				int end_index = Main_Form.Rows.Count - 1;
+				Main_Form.Rows[end_index].Cells[0].Value = "In";
 				Main_Form.ClearSelection();
 			}
 		}
@@ -79,6 +111,8 @@ namespace LendingLibrary
 		private void button_CheckOut_Click(object sender, EventArgs e) {
 			// Do a check.
 			int empty = 0;
+			string Date_Str = Date_To_String((int)numericUpDown_Month.Value,
+					(int)numericUpDown_Day.Value, (int)numericUpDown_Year.Value);
 			if (string.IsNullOrWhiteSpace(textBox_NameFirst.Text)) {
 				textBox_NameFirst.BackColor = Color.LightCoral;
 				empty++;
@@ -99,10 +133,6 @@ namespace LendingLibrary
 				comboBox_ItemCat.BackColor = Color.LightCoral;
 				empty++;
 			}
-			if (string.IsNullOrWhiteSpace(textBox_ItemDesc.Text)) {
-				textBox_ItemDesc.BackColor = Color.LightCoral;
-				empty++;
-			}
 			if (string.IsNullOrWhiteSpace(textBox_StaffOut.Text)) {
 				textBox_StaffOut.BackColor = Color.LightCoral;
 				empty++;
@@ -110,6 +140,10 @@ namespace LendingLibrary
 			// Empty check
 			if (empty > 0) {
 				MessageBox.Show("Item form incomplete.", "Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			}
+			else if (!Is_Valid_Date(Date_Str)) {
+				MessageBox.Show("Proposed Due Date is not valid with the current Date.", "Invalid", 
+					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			}
 			else {
 				Close();
@@ -137,8 +171,16 @@ namespace LendingLibrary
 			comboBox_ItemCat.BackColor = SystemColors.Window;
 		}
 
-		private void textBox_ItemDesc_TextChanged(object sender, EventArgs e) {
-			textBox_ItemDesc.BackColor = SystemColors.Window;
+		private void numericUpDown_Month_ValueChanged(object sender, EventArgs e) {
+			numericUpDown_Month.BackColor = SystemColors.Window;
+		}
+
+		private void numericUpDown_Day_ValueChanged(object sender, EventArgs e) {
+			numericUpDown_Day.BackColor = SystemColors.Window;
+		}
+
+		private void numericUpDown_Year_ValueChanged(object sender, EventArgs e) {
+			numericUpDown_Year.BackColor = SystemColors.Window;
 		}
 
 		private void textBox_StaffOut_TextChanged(object sender, EventArgs e) {

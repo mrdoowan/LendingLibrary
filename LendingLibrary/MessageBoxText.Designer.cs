@@ -44,6 +44,7 @@
 			// textBox1
 			// 
 			this.textBox1.Location = new System.Drawing.Point(15, 159);
+			this.textBox1.MaxLength = 50;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.Size = new System.Drawing.Size(341, 23);
 			this.textBox1.TabIndex = 1;
@@ -54,7 +55,7 @@
 			this.label_BottomMsg.Name = "label_BottomMsg";
 			this.label_BottomMsg.Size = new System.Drawing.Size(344, 24);
 			this.label_BottomMsg.TabIndex = 2;
-			this.label_BottomMsg.Text = "Checked In By:";
+			this.label_BottomMsg.Text = "Checked In By Staff:";
 			this.label_BottomMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// button_OK
@@ -65,6 +66,7 @@
 			this.button_OK.TabIndex = 3;
 			this.button_OK.Text = "Check-In";
 			this.button_OK.UseVisualStyleBackColor = true;
+			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
 			// MessageBoxText
 			// 

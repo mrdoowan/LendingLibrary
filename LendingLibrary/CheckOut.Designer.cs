@@ -162,7 +162,6 @@
 			this.textBox_ItemDesc.Name = "textBox_ItemDesc";
 			this.textBox_ItemDesc.Size = new System.Drawing.Size(281, 23);
 			this.textBox_ItemDesc.TabIndex = 12;
-			this.textBox_ItemDesc.TextChanged += new System.EventHandler(this.textBox_ItemDesc_TextChanged);
 			// 
 			// textBox_StaffOut
 			// 
@@ -224,6 +223,7 @@
             0,
             0,
             0});
+			this.numericUpDown_Month.ValueChanged += new System.EventHandler(this.numericUpDown_Month_ValueChanged);
 			// 
 			// label9
 			// 
@@ -255,6 +255,7 @@
             0,
             0,
             0});
+			this.numericUpDown_Day.ValueChanged += new System.EventHandler(this.numericUpDown_Day_ValueChanged);
 			// 
 			// numericUpDown_Year
 			// 
@@ -272,6 +273,7 @@
             0,
             0,
             0});
+			this.numericUpDown_Year.ValueChanged += new System.EventHandler(this.numericUpDown_Year_ValueChanged);
 			// 
 			// label10
 			// 

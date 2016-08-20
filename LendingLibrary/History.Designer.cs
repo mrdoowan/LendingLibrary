@@ -25,7 +25,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(History));
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.NameFirst = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -34,9 +34,13 @@
 			this.Uniqname = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ItemCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.ItemDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.DueDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.StaffOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.CheckInTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.CheckInStaff = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label_CheckOut = new System.Windows.Forms.Label();
+			this.label_DueDate = new System.Windows.Forms.Label();
 			this.label_StaffIn = new System.Windows.Forms.Label();
 			this.label_CheckIn = new System.Windows.Forms.Label();
 			this.label_ItemDesc = new System.Windows.Forms.Label();
@@ -55,15 +59,16 @@
 			// 
 			this.dataGridView1.AllowUserToAddRows = false;
 			this.dataGridView1.AllowUserToDeleteRows = false;
+			this.dataGridView1.AllowUserToResizeRows = false;
 			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.NameFirst,
@@ -72,11 +77,15 @@
             this.Uniqname,
             this.ItemCat,
             this.ItemDesc,
+            this.DueDate,
+            this.StaffOut,
             this.CheckInTime,
             this.CheckInStaff});
 			this.dataGridView1.Location = new System.Drawing.Point(12, 12);
+			this.dataGridView1.MultiSelect = false;
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.ReadOnly = true;
+			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.dataGridView1.Size = new System.Drawing.Size(755, 420);
 			this.dataGridView1.TabIndex = 0;
 			this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
@@ -86,51 +95,75 @@
 			this.NameFirst.HeaderText = "Name (First)";
 			this.NameFirst.Name = "NameFirst";
 			this.NameFirst.ReadOnly = true;
+			this.NameFirst.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
 			// NameLast
 			// 
 			this.NameLast.HeaderText = "Name (Last)";
 			this.NameLast.Name = "NameLast";
 			this.NameLast.ReadOnly = true;
+			this.NameLast.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
 			// UMID
 			// 
 			this.UMID.HeaderText = "UMID";
 			this.UMID.Name = "UMID";
 			this.UMID.ReadOnly = true;
+			this.UMID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
 			// Uniqname
 			// 
 			this.Uniqname.HeaderText = "Uniqname";
 			this.Uniqname.Name = "Uniqname";
 			this.Uniqname.ReadOnly = true;
+			this.Uniqname.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
 			// ItemCat
 			// 
 			this.ItemCat.HeaderText = "Item Category";
 			this.ItemCat.Name = "ItemCat";
 			this.ItemCat.ReadOnly = true;
+			this.ItemCat.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
 			// ItemDesc
 			// 
 			this.ItemDesc.HeaderText = "Item Description";
 			this.ItemDesc.Name = "ItemDesc";
 			this.ItemDesc.ReadOnly = true;
+			this.ItemDesc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// DueDate
+			// 
+			this.DueDate.HeaderText = "Due Date";
+			this.DueDate.Name = "DueDate";
+			this.DueDate.ReadOnly = true;
+			this.DueDate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// StaffOut
+			// 
+			this.StaffOut.HeaderText = "Staff Out";
+			this.StaffOut.Name = "StaffOut";
+			this.StaffOut.ReadOnly = true;
+			this.StaffOut.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
 			// CheckInTime
 			// 
 			this.CheckInTime.HeaderText = "Check-In Time";
 			this.CheckInTime.Name = "CheckInTime";
 			this.CheckInTime.ReadOnly = true;
+			this.CheckInTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
 			// CheckInStaff
 			// 
 			this.CheckInStaff.HeaderText = "Staff In";
 			this.CheckInStaff.Name = "CheckInStaff";
 			this.CheckInStaff.ReadOnly = true;
+			this.CheckInStaff.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.label_CheckOut);
+			this.groupBox1.Controls.Add(this.label_DueDate);
 			this.groupBox1.Controls.Add(this.label_StaffIn);
 			this.groupBox1.Controls.Add(this.label_CheckIn);
 			this.groupBox1.Controls.Add(this.label_ItemDesc);
@@ -141,14 +174,30 @@
 			this.groupBox1.Controls.Add(this.label_FirstName);
 			this.groupBox1.Location = new System.Drawing.Point(12, 438);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(755, 102);
+			this.groupBox1.Size = new System.Drawing.Size(755, 122);
 			this.groupBox1.TabIndex = 3;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Item Information";
 			// 
+			// label_CheckOut
+			// 
+			this.label_CheckOut.Location = new System.Drawing.Point(376, 78);
+			this.label_CheckOut.Name = "label_CheckOut";
+			this.label_CheckOut.Size = new System.Drawing.Size(373, 20);
+			this.label_CheckOut.TabIndex = 11;
+			this.label_CheckOut.Text = "Checked Out By:";
+			// 
+			// label_DueDate
+			// 
+			this.label_DueDate.Location = new System.Drawing.Point(6, 78);
+			this.label_DueDate.Name = "label_DueDate";
+			this.label_DueDate.Size = new System.Drawing.Size(364, 20);
+			this.label_DueDate.TabIndex = 10;
+			this.label_DueDate.Text = "Due Date:";
+			// 
 			// label_StaffIn
 			// 
-			this.label_StaffIn.Location = new System.Drawing.Point(376, 78);
+			this.label_StaffIn.Location = new System.Drawing.Point(376, 98);
 			this.label_StaffIn.Name = "label_StaffIn";
 			this.label_StaffIn.Size = new System.Drawing.Size(373, 20);
 			this.label_StaffIn.TabIndex = 9;
@@ -156,7 +205,7 @@
 			// 
 			// label_CheckIn
 			// 
-			this.label_CheckIn.Location = new System.Drawing.Point(376, 58);
+			this.label_CheckIn.Location = new System.Drawing.Point(6, 98);
 			this.label_CheckIn.Name = "label_CheckIn";
 			this.label_CheckIn.Size = new System.Drawing.Size(364, 20);
 			this.label_CheckIn.TabIndex = 8;
@@ -180,7 +229,7 @@
 			// 
 			// label_Uniq
 			// 
-			this.label_Uniq.Location = new System.Drawing.Point(6, 78);
+			this.label_Uniq.Location = new System.Drawing.Point(376, 58);
 			this.label_Uniq.Name = "label_Uniq";
 			this.label_Uniq.Size = new System.Drawing.Size(364, 20);
 			this.label_Uniq.TabIndex = 3;
@@ -212,7 +261,7 @@
 			// 
 			// button_ClearHistory
 			// 
-			this.button_ClearHistory.Location = new System.Drawing.Point(649, 546);
+			this.button_ClearHistory.Location = new System.Drawing.Point(649, 566);
 			this.button_ClearHistory.Name = "button_ClearHistory";
 			this.button_ClearHistory.Size = new System.Drawing.Size(118, 28);
 			this.button_ClearHistory.TabIndex = 4;
@@ -222,18 +271,18 @@
 			// 
 			// label_LastClear
 			// 
-			this.label_LastClear.Location = new System.Drawing.Point(18, 550);
+			this.label_LastClear.Location = new System.Drawing.Point(18, 570);
 			this.label_LastClear.Name = "label_LastClear";
 			this.label_LastClear.Size = new System.Drawing.Size(625, 20);
 			this.label_LastClear.TabIndex = 10;
-			this.label_LastClear.Text = "Last History Clear: ";
+			this.label_LastClear.Text = "Last History Clear: None";
 			// 
 			// History
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-			this.ClientSize = new System.Drawing.Size(779, 579);
+			this.ClientSize = new System.Drawing.Size(779, 599);
 			this.Controls.Add(this.label_LastClear);
 			this.Controls.Add(this.button_ClearHistory);
 			this.Controls.Add(this.groupBox1);
@@ -261,15 +310,19 @@
 		private System.Windows.Forms.Label label_FirstName;
 		private System.Windows.Forms.Label label_StaffIn;
 		private System.Windows.Forms.Label label_CheckIn;
+		private System.Windows.Forms.Button button_ClearHistory;
+		private System.Windows.Forms.Label label_LastClear;
+		private System.Windows.Forms.Label label_CheckOut;
+		private System.Windows.Forms.Label label_DueDate;
 		private System.Windows.Forms.DataGridViewTextBoxColumn NameFirst;
 		private System.Windows.Forms.DataGridViewTextBoxColumn NameLast;
 		private System.Windows.Forms.DataGridViewTextBoxColumn UMID;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Uniqname;
 		private System.Windows.Forms.DataGridViewTextBoxColumn ItemCat;
 		private System.Windows.Forms.DataGridViewTextBoxColumn ItemDesc;
+		private System.Windows.Forms.DataGridViewTextBoxColumn DueDate;
+		private System.Windows.Forms.DataGridViewTextBoxColumn StaffOut;
 		private System.Windows.Forms.DataGridViewTextBoxColumn CheckInTime;
 		private System.Windows.Forms.DataGridViewTextBoxColumn CheckInStaff;
-		private System.Windows.Forms.Button button_ClearHistory;
-		private System.Windows.Forms.Label label_LastClear;
 	}
 }
