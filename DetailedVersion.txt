@@ -1,3 +1,5 @@
+BETA.2
+- Completed. Needs to be tested.
 BETA.1
 - Pretty much almost finished.
 - Need to implement Load/Save for Applications.Settings

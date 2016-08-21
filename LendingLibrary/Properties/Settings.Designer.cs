@@ -25,23 +25,37 @@ namespace LendingLibrary.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection DataItems {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SaveDataItems {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["DataItems"]));
+                return ((string)(this["SaveDataItems"]));
             }
             set {
-                this["DataItems"] = value;
+                this["SaveDataItems"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection HistoryItems {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SaveHistoryItems {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["HistoryItems"]));
+                return ((string)(this["SaveHistoryItems"]));
             }
             set {
-                this["HistoryItems"] = value;
+                this["SaveHistoryItems"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastHistClear {
+            get {
+                return ((string)(this["LastHistClear"]));
+            }
+            set {
+                this["LastHistClear"] = value;
             }
         }
     }

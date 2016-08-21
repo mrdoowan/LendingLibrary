@@ -6,17 +6,24 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace LendingLibrary
 {
 	public partial class Form1 : Form
 	{
-		private const string version = "1.0.0";
-
 		public Form1() {
 			InitializeComponent();
 		}
+
+		private const string version = "1.0.0";
+		private const string website = "https://github.com/mrdoowan/LendingLibrary/releases";
+		private static bool upgrading = false;
 
 		[Serializable()] // For serializing into a string to save
 		public struct Item
@@ -65,9 +72,11 @@ namespace LendingLibrary
 		}
 
 		// Variables for save.
-		public static List<Item> DataItems = new List<Item>();
+		// public static List<Item> DataItems = new List<Item>(); // (This isn't needed anymore)
 		public static List<Item> HistoryItems = new List<Item>();
 		public static string LastHistoryClear = "Last History Clear: None";
+
+		#region Functions
 
 		private void Empty_All_Labels() {
 			label_FirstName.Text = "Name (First): ";
@@ -79,6 +88,7 @@ namespace LendingLibrary
 			label_DueDate.Text = "Due Date: ";
 			label_CheckOut.Text = "Checked Out By: ";
 			label_Reminder.Text = "";
+			dataGridView1.ClearSelection();
 		}
 
 		// Returns true if overdue
@@ -95,23 +105,66 @@ namespace LendingLibrary
 			return false;
 		}
 
+		// Version follows the following format:
+		// Major.Minor.Revision (only 3)
+		// Very temporary Update Check that simply leads to the Github page.
+		private void Check_Update() {
+			WebClient WC = new WebClient();
+			try {
+				string[] current = version.Split('.');
+				// Get latest version from site
+				string header_msg = "LendingLirary " + Assembly.GetExecutingAssembly().GetName().Version.ToString() + " UpdateCheck " + Environment.OSVersion;
+				WC.Headers.Add("Content-Type", header_msg);
+				string version_page = WC.DownloadString("https://raw.githubusercontent.com/mrdoowan/LendingLibrary/master/CurrentVersion.txt");
+				string[] latest = version_page.Split('.');
+				// Since we are looping through Current length, Current should not be bigger than Latest
+				if (current.Length > latest.Length) {
+					MessageBox.Show("The current Length is greater than latest Length.", "Report Bug", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+				for (int i = 0; i < current.Length; ++i) {
+					// We do nothing if the current version is greater than latest version
+					if (int.Parse(current[i]) > int.Parse(latest[i])) {
+						return;
+					}
+					else if (i == current.Length - 1 && (int.Parse(current[i]) >= int.Parse(latest[i]))) { // Last number check.
+						return;
+					}
+				}
+				// If we've arrived at this point, that means it needs updating.
+				if (MessageBox.Show("An update to v" + version_page + " is available. Would you like to close this application and download the newest version?" + 
+					"\nNOTE: You will need to re-check out every items in this current Application.", "New Version",
+					MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes) {
+					Process.Start(website);
+					upgrading = true;
+					Application.Exit();
+				}
+			}
+			catch (Exception e) {
+				MessageBox.Show("Error in checking for an update.\nReason: " + e.Message, "OPRP Char Builder", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			}
+		}
+
+		#endregion
+
 		#region Event Handlers
 
+		// For Check Out Items
 		private void button_CheckOut_Click(object sender, EventArgs e) {
 			CheckOut checkOut_Win = new CheckOut();
 			checkOut_Win.CheckOut_Dialog(ref dataGridView1);
 			Empty_All_Labels();
 		}
 
-		// For checking-In Item.
+		// For Check In Item.
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
 			DataGridView Grid = (DataGridView)sender;
 			if (Grid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0) {
 				//Button Clicked for that row.
-				DataGridViewRow Item = Grid.Rows[e.RowIndex];
+				DataGridViewRow item = Grid.Rows[e.RowIndex];
 				MessageBoxText checkIn_Win = new MessageBoxText();
-				if (checkIn_Win.CheckIn_Dialog(Item)) {
-					Grid.Rows.RemoveAt(Item.Index);
+				if (checkIn_Win.CheckIn_Dialog(item)) {
+					Grid.Rows.RemoveAt(item.Index);
 					Grid.Refresh();
 					Empty_All_Labels();
 					MessageBox.Show("Item checked in!", "Success");
@@ -121,13 +174,13 @@ namespace LendingLibrary
 
 		// Remove an Item.
 		private void button_Remove_Click(object sender, EventArgs e) {
-			DataGridViewRow Item = dataGridView1.SelectedRows[0];
-			string message = "Do you want to remove Item \"" + Item.Cells[5].Value.ToString();
-			if (!string.IsNullOrWhiteSpace(Item.Cells[6].Value.ToString())) { message += " - " + Item.Cells[6].Value.ToString(); }
+			DataGridViewRow item = dataGridView1.SelectedRows[0];
+			string message = "Do you want to remove Item \"" + item.Cells[5].Value.ToString();
+			if (!string.IsNullOrWhiteSpace(item.Cells[6].Value.ToString())) { message += " - " + item.Cells[6].Value.ToString(); }
 			message += "\"?\n";
 			message += "NOTE: This is NOT checking in an item. Please press the \"In\" button on each Item if checking in.";
 			if (MessageBox.Show(message, "Reminder", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
-				dataGridView1.Rows.RemoveAt(Item.Index);
+				dataGridView1.Rows.RemoveAt(item.Index);
 				dataGridView1.Refresh();
 				Empty_All_Labels();
 				MessageBox.Show("Item removed.", "Removed");
@@ -166,16 +219,16 @@ namespace LendingLibrary
 		private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e) {
 			try {
 				DataGridView Grid = (DataGridView)sender;
-				DataGridViewRow Item = Grid.Rows[e.RowIndex];
-				label_FirstName.Text = "Name (First): " + Item.Cells[1].Value.ToString();
-				label_NameLast.Text = "Name (Last): " + Item.Cells[2].Value.ToString();
-				label_UMID.Text = "UMID: " + Item.Cells[3].Value.ToString();
-				label_Uniq.Text = "Uniqname: " + Item.Cells[4].Value.ToString();
-				label_ItemCat.Text = "Item Category: " + Item.Cells[5].Value.ToString();
-				label_ItemDesc.Text = "Item Description: " + Item.Cells[6].Value.ToString();
-				string dueDate = Item.Cells[7].Value.ToString();
+				DataGridViewRow item = Grid.Rows[e.RowIndex];
+				label_FirstName.Text = "Name (First): " + item.Cells[1].Value.ToString();
+				label_NameLast.Text = "Name (Last): " + item.Cells[2].Value.ToString();
+				label_UMID.Text = "UMID: " + item.Cells[3].Value.ToString();
+				label_Uniq.Text = "Uniqname: " + item.Cells[4].Value.ToString();
+				label_ItemCat.Text = "Item Category: " + item.Cells[5].Value.ToString();
+				label_ItemDesc.Text = "Item Description: " + item.Cells[6].Value.ToString();
+				string dueDate = item.Cells[7].Value.ToString();
 				label_DueDate.Text = "Due Date: " + dueDate;
-				label_CheckOut.Text = "Checked Out By: " + Item.Cells[8].Value.ToString();
+				label_CheckOut.Text = "Checked Out By: " + item.Cells[8].Value.ToString();
 				if (Is_Overdue(dueDate)) {
 					label_Reminder.Text = "OVERDUE: " + dueDate + ". Please Email the resident a reminder.";
 				}
@@ -183,16 +236,110 @@ namespace LendingLibrary
 			catch { } // Used if resizing the columns
 		}
 
+		// Save Functions for the Default
+		private void SaveItems(List<Item> dataItems, List<Item> histItems) {
+			using (MemoryStream ms = new MemoryStream()) {
+				BinaryFormatter bf = new BinaryFormatter();
+				bf.Serialize(ms, dataItems);
+				ms.Position = 0;
+				byte[] buffer = new byte[(int)ms.Length];
+				ms.Read(buffer, 0, buffer.Length);
+				Properties.Settings.Default.SaveDataItems = Convert.ToBase64String(buffer);
+				Properties.Settings.Default.Save();
+			}
+			using (MemoryStream ms = new MemoryStream()) {
+				BinaryFormatter bf = new BinaryFormatter();
+				bf.Serialize(ms, histItems);
+				ms.Position = 0;
+				byte[] buffer = new byte[(int)ms.Length];
+				ms.Read(buffer, 0, buffer.Length);
+				Properties.Settings.Default.SaveHistoryItems = Convert.ToBase64String(buffer);
+				Properties.Settings.Default.Save();
+			}
+			Properties.Settings.Default.LastHistClear = LastHistoryClear;
+			Properties.Settings.Default.Save();
+		}
+
+		// To load Data Items
+		List<Item> LoadDataItems() {
+			if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.SaveHistoryItems)) {
+				using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Properties.Settings.Default.SaveDataItems))) {
+					BinaryFormatter bf = new BinaryFormatter();
+					return (List<Item>)bf.Deserialize(ms);
+				}
+			}
+			return new List<Item>();
+		}
+
+		// To load History Items
+		List<Item> LoadHistoryItems() {
+			if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.SaveHistoryItems)) {
+				using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Properties.Settings.Default.SaveHistoryItems))) {
+					BinaryFormatter bf = new BinaryFormatter();
+					return (List<Item>)bf.Deserialize(ms);
+				}
+			}
+			return new List<Item>();
+		}
+
 		// Save the objects
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
-
+			if (!upgrading) {
+				// Make a List<Item> for DataItems first.
+				List<Item> DataItems = new List<Item>();
+				foreach (DataGridViewRow item in dataGridView1.Rows) {
+					string firstName = item.Cells[1].Value.ToString();
+					string lastName = item.Cells[2].Value.ToString();
+					string UMID = item.Cells[3].Value.ToString();
+					string Uniq = item.Cells[4].Value.ToString();
+					string itemCat = item.Cells[5].Value.ToString();
+					string itemDesc = item.Cells[6].Value.ToString();
+					string dueDate = item.Cells[7].Value.ToString();
+					string staffOut = item.Cells[8].Value.ToString();
+					DataItems.Add(new Item(firstName, lastName, UMID, Uniq, itemCat, itemDesc, dueDate, staffOut));
+				}
+				// Now save the items.
+				SaveItems(DataItems, HistoryItems);
+			}
 		}
 
 		// Also checks for Updates
 		// Opens the objects
 		// Also flags a row red when an item is overdue.
 		private void Form1_Load(object sender, EventArgs e) {
-
+			// Check Update
+			Check_Update();
+			// Open/Load objects into Lists / string / DataGridView
+			LastHistoryClear = Properties.Settings.Default.LastHistClear;
+			HistoryItems = LoadHistoryItems();
+			List<Item> DataItems = LoadDataItems();
+			foreach (Item item in DataItems) {
+				DataGridViewButtonColumn button = new DataGridViewButtonColumn();
+				string firstName = item.nameFirst;
+				string lastName = item.nameLast;
+				string UMID = item.UMID;
+				string Uniq = item.uniq;
+				string itemCat = item.itemCat;
+				string itemDesc = item.itemDesc;
+				string dueDate = item.dueDate;
+				string staffOut = item.staffOut;
+				// Adding to the dataGridView
+				dataGridView1.Rows.Add(button, firstName, lastName, UMID, 
+					Uniq, itemCat, itemDesc, dueDate, staffOut);
+				int end_index = dataGridView1.Rows.Count - 1;
+				dataGridView1.Rows[end_index].Cells[0].Value = "In";
+			}
+			dataGridView1.ClearSelection();
+			// Check each item if overdue. If so, mark entire row red.
+			foreach (DataGridViewRow item in dataGridView1.Rows) {
+				string dueDate = item.Cells[7].Value.ToString();
+				if (Is_Overdue(dueDate)) {
+					// Mark every cell in the row as Red.
+					foreach (DataGridViewCell cell in item.Cells) {
+						cell.Style.BackColor = Color.Red;
+					}
+				}
+			}
 		}
 
 		#endregion

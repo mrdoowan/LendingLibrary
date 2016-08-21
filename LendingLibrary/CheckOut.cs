@@ -88,15 +88,23 @@ namespace LendingLibrary
 			if (button_clicked) {
 				string Date_Str = Date_To_String((int)numericUpDown_Month.Value,
 					(int)numericUpDown_Day.Value, (int)numericUpDown_Year.Value);
-				// Edit Form
+				// Edit Form and mark background color as White.
 				Main_Form.SelectedRows[0].Cells[1].Value = textBox_NameFirst.Text;
+				Main_Form.SelectedRows[0].Cells[1].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[2].Value = textBox_NameLast.Text;
+				Main_Form.SelectedRows[0].Cells[2].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[3].Value = textBox_UMID.Text;
+				Main_Form.SelectedRows[0].Cells[3].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[4].Value = textBox_Uniq.Text;
+				Main_Form.SelectedRows[0].Cells[4].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[5].Value = comboBox_ItemCat.Text;
+				Main_Form.SelectedRows[0].Cells[5].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[6].Value = textBox_ItemDesc.Text;
+				Main_Form.SelectedRows[0].Cells[6].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[7].Value = Date_Str;
+				Main_Form.SelectedRows[0].Cells[7].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[8].Value = textBox_StaffOut.Text;
+				Main_Form.SelectedRows[0].Cells[8].Style.BackColor = Color.White;
 			}
 		}
 

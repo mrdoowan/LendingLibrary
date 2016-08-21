@@ -2,10 +2,13 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="LendingLibrary.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="DataItems" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="SaveDataItems" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="HistoryItems" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="SaveHistoryItems" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="LastHistClear" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

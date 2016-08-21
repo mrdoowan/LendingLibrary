@@ -20,7 +20,7 @@ namespace LendingLibrary
 
 		public void History_Dialog() {
 			foreach (Form1.Item PastItem in Form1.HistoryItems) {
-				dataGridView1.Rows.Add(PastItem.nameFirst, PastItem.nameLast, PastItem.UMID, PastItem.uniq,
+				dataGridView1.Rows.Insert(0, PastItem.nameFirst, PastItem.nameLast, PastItem.UMID, PastItem.uniq,
 					PastItem.itemCat, PastItem.itemDesc, PastItem.dueDate, PastItem.staffOut, PastItem.checkInTime, 
 					PastItem.staffIn);
 			}
@@ -49,17 +49,17 @@ namespace LendingLibrary
 		private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e) {
 			try {
 				DataGridView Grid = (DataGridView)sender;
-				DataGridViewRow Item = Grid.Rows[e.RowIndex];
-				label_FirstName.Text = "Name (First): " + Item.Cells[0].Value.ToString();
-				label_NameLast.Text = "Name (Last): " + Item.Cells[1].Value.ToString();
-				label_UMID.Text = "UMID: " + Item.Cells[2].Value.ToString();
-				label_Uniq.Text = "Uniqname: " + Item.Cells[3].Value.ToString();
-				label_ItemCat.Text = "Item Category: " + Item.Cells[4].Value.ToString();
-				label_ItemDesc.Text = "Item Description: " + Item.Cells[5].Value.ToString();
-				label_DueDate.Text = "Due Date: " + Item.Cells[6].Value.ToString();
-				label_CheckOut.Text = "Checked Out By: " + Item.Cells[7].Value.ToString();
-				label_CheckIn.Text = "Check In Time: " + Item.Cells[8].Value.ToString();
-				label_StaffIn.Text = "Checked In By: " + Item.Cells[9].Value.ToString();
+				DataGridViewRow item = Grid.Rows[e.RowIndex];
+				label_FirstName.Text = "Name (First): " + item.Cells[0].Value.ToString();
+				label_NameLast.Text = "Name (Last): " + item.Cells[1].Value.ToString();
+				label_UMID.Text = "UMID: " + item.Cells[2].Value.ToString();
+				label_Uniq.Text = "Uniqname: " + item.Cells[3].Value.ToString();
+				label_ItemCat.Text = "Item Category: " + item.Cells[4].Value.ToString();
+				label_ItemDesc.Text = "Item Description: " + item.Cells[5].Value.ToString();
+				label_DueDate.Text = "Due Date: " + item.Cells[6].Value.ToString();
+				label_CheckOut.Text = "Checked Out By: " + item.Cells[7].Value.ToString();
+				label_CheckIn.Text = "Check In Time: " + item.Cells[8].Value.ToString();
+				label_StaffIn.Text = "Checked In By: " + item.Cells[9].Value.ToString();
 			}
 			catch { } // Used if resizing the columns
 		}
