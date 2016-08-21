@@ -1,3 +1,7 @@
+v1.0.0
+- Version update implemented
+- Small QoL changes with Windows Forms
+- For now, reversed the check due date of Check Out items.
 BETA.2
 - Completed. Needs to be tested.
 BETA.1

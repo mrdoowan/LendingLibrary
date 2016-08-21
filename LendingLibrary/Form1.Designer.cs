@@ -291,20 +291,20 @@
             this.historyToolStripMenuItem,
             this.helpToolStripMenuItem});
 			this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
-			this.infoToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-			this.infoToolStripMenuItem.Text = "Misc";
+			this.infoToolStripMenuItem.Size = new System.Drawing.Size(82, 20);
+			this.infoToolStripMenuItem.Text = "Information";
 			// 
 			// historyToolStripMenuItem
 			// 
 			this.historyToolStripMenuItem.Name = "historyToolStripMenuItem";
-			this.historyToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.historyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.historyToolStripMenuItem.Text = "History";
 			this.historyToolStripMenuItem.Click += new System.EventHandler(this.historyToolStripMenuItem_Click);
 			// 
 			// helpToolStripMenuItem
 			// 
 			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.helpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.helpToolStripMenuItem.Text = "Help";
 			this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
 			// 

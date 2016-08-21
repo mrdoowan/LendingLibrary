@@ -93,7 +93,7 @@ namespace LendingLibrary
 
 		// Returns true if overdue
 		// Returns false if fine.
-		private bool Is_Overdue(string dueDateStr) {
+		static public bool Is_Overdue(string dueDateStr) {
 			DateTime localTime = DateTime.Now;
 			string currDateStr = localTime.Date.ToString("d");
 			// [0] is month, [1] is day, [2] is year
@@ -174,16 +174,18 @@ namespace LendingLibrary
 
 		// Remove an Item.
 		private void button_Remove_Click(object sender, EventArgs e) {
-			DataGridViewRow item = dataGridView1.SelectedRows[0];
-			string message = "Do you want to remove Item \"" + item.Cells[5].Value.ToString();
-			if (!string.IsNullOrWhiteSpace(item.Cells[6].Value.ToString())) { message += " - " + item.Cells[6].Value.ToString(); }
-			message += "\"?\n";
-			message += "NOTE: This is NOT checking in an item. Please press the \"In\" button on each Item if checking in.";
-			if (MessageBox.Show(message, "Reminder", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
-				dataGridView1.Rows.RemoveAt(item.Index);
-				dataGridView1.Refresh();
-				Empty_All_Labels();
-				MessageBox.Show("Item removed.", "Removed");
+			if (dataGridView1.SelectedRows.Count > 0) {
+				DataGridViewRow item = dataGridView1.SelectedRows[0];
+				string message = "Do you want to remove Item \"" + item.Cells[5].Value.ToString();
+				if (!string.IsNullOrWhiteSpace(item.Cells[6].Value.ToString())) { message += " - " + item.Cells[6].Value.ToString(); }
+				message += "\"?\n";
+				message += "NOTE: This is NOT checking in an item. Please press the \"In\" button on each Item if checking in.";
+				if (MessageBox.Show(message, "Reminder", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+					dataGridView1.Rows.RemoveAt(item.Index);
+					dataGridView1.Refresh();
+					Empty_All_Labels();
+					MessageBox.Show("Item removed.", "Removed");
+				}
 			}
 		}
 
@@ -203,9 +205,11 @@ namespace LendingLibrary
 				"- Double click on an Item to edit the information.\n" + 
 				"- You can check the History through the Misc -> History menu strip. " +
 				"All items will be logged appropriately with its specified time and date. " + 
-				"You are also able to Clear the History.\n\n" +
+				"You are also able to Clear the History.\n" +
+				"- Press the \"Remove\" button to remove an Item without checking it in. Please " +
+				"do not use this unless you made a mistake.\n\n" +
 				"Open-Source: https://github.com/mrdoowan/LendingLibrary \n" +
-				"Created by Steven Duan. Contact me (sduans@umich.edu) for any questions.";
+				"Created by Steven Duan. Contact sduans@umich.edu for any questions.";
 			MessageBox.Show(message, "Help", MessageBoxButtons.OK);
 		}
 
@@ -213,6 +217,7 @@ namespace LendingLibrary
 		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e) {
 			CheckOut EditItem_Win = new CheckOut();
 			EditItem_Win.EditItem_Dialog(ref dataGridView1);
+			Empty_All_Labels();
 		}
 
         // To display the information in the labels
@@ -336,7 +341,7 @@ namespace LendingLibrary
 				if (Is_Overdue(dueDate)) {
 					// Mark every cell in the row as Red.
 					foreach (DataGridViewCell cell in item.Cells) {
-						cell.Style.BackColor = Color.Red;
+						cell.Style.BackColor = Color.LightCoral;
 					}
 				}
 			}

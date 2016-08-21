@@ -173,7 +173,6 @@
 			// 
 			// comboBox_ItemCat
 			// 
-			this.comboBox_ItemCat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBox_ItemCat.FormattingEnabled = true;
 			this.comboBox_ItemCat.Items.AddRange(new object[] {
             "Blue Apple Key",

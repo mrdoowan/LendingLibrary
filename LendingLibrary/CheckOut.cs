@@ -57,13 +57,19 @@ namespace LendingLibrary
 					(int)numericUpDown_Day.Value, (int)numericUpDown_Year.Value);
 				// Add to DataGridView
 				DataGridViewButtonColumn button = new DataGridViewButtonColumn();
-				Main_Form.Rows.Add(button, textBox_NameFirst.Text,
+				Main_Form.Rows.Insert(0, button, textBox_NameFirst.Text,
 					textBox_NameLast.Text, textBox_UMID.Text, textBox_Uniq.Text,
 					comboBox_ItemCat.Text, textBox_ItemDesc.Text, Date_Str,
 					textBox_StaffOut.Text);
-				int end_index = Main_Form.Rows.Count - 1;
-				Main_Form.Rows[end_index].Cells[0].Value = "In";
+				Main_Form.Rows[0].Cells[0].Value = "In";
 				Main_Form.ClearSelection();
+				string dueDate = Main_Form.Rows[0].Cells[7].Value.ToString();
+				if (Form1.Is_Overdue(dueDate)) {
+					// Mark every cell in the row as Red.
+					foreach (DataGridViewCell cell in Main_Form.Rows[0].Cells) {
+						cell.Style.BackColor = Color.LightCoral;
+					}
+				}
 			}
 		}
 
@@ -90,21 +96,23 @@ namespace LendingLibrary
 					(int)numericUpDown_Day.Value, (int)numericUpDown_Year.Value);
 				// Edit Form and mark background color as White.
 				Main_Form.SelectedRows[0].Cells[1].Value = textBox_NameFirst.Text;
-				Main_Form.SelectedRows[0].Cells[1].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[2].Value = textBox_NameLast.Text;
-				Main_Form.SelectedRows[0].Cells[2].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[3].Value = textBox_UMID.Text;
-				Main_Form.SelectedRows[0].Cells[3].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[4].Value = textBox_Uniq.Text;
-				Main_Form.SelectedRows[0].Cells[4].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[5].Value = comboBox_ItemCat.Text;
-				Main_Form.SelectedRows[0].Cells[5].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[6].Value = textBox_ItemDesc.Text;
-				Main_Form.SelectedRows[0].Cells[6].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[7].Value = Date_Str;
-				Main_Form.SelectedRows[0].Cells[7].Style.BackColor = Color.White;
 				Main_Form.SelectedRows[0].Cells[8].Value = textBox_StaffOut.Text;
-				Main_Form.SelectedRows[0].Cells[8].Style.BackColor = Color.White;
+				foreach (DataGridViewCell cell in Main_Form.SelectedRows[0].Cells) {
+					cell.Style.BackColor = Color.White;
+				}
+				string dueDate = Main_Form.SelectedRows[0].Cells[7].Value.ToString();
+				if (Form1.Is_Overdue(dueDate)) {
+					// Mark every cell in the row as Red.
+					foreach (DataGridViewCell cell in Main_Form.SelectedRows[0].Cells) {
+						cell.Style.BackColor = Color.LightCoral;
+					}
+				}
 			}
 		}
 
@@ -149,10 +157,10 @@ namespace LendingLibrary
 			if (empty > 0) {
 				MessageBox.Show("Item form incomplete.", "Incomplete", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			}
-			else if (!Is_Valid_Date(Date_Str)) {
+			/* else if (!Is_Valid_Date(Date_Str)) {
 				MessageBox.Show("Proposed Due Date is not valid with the current Date.", "Invalid", 
 					MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-			}
+			} */
 			else {
 				Close();
 				button_clicked = true;
