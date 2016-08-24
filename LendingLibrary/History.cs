@@ -21,16 +21,20 @@ namespace LendingLibrary
 		public void History_Dialog() {
 			foreach (Form1.Item PastItem in Form1.HistoryItems) {
 				dataGridView1.Rows.Insert(0, PastItem.nameFirst, PastItem.nameLast, PastItem.UMID, PastItem.uniq,
-					PastItem.itemCat, PastItem.itemDesc, PastItem.dueDate, PastItem.staffOut, PastItem.checkInTime, 
-					PastItem.staffIn);
+					PastItem.checkOutTime, PastItem.itemCat, PastItem.itemDesc, PastItem.dueDate, PastItem.staffOut, 
+					PastItem.checkInTime, PastItem.staffIn);
 			}
-			dataGridView1.ClearSelection();
+			label_LastClear.Text = Form1.LastHistoryClear;
 			ShowDialog();
 		}
 
+		// That's weird that we have to do this to clear selection
+		private void History_Shown(object sender, EventArgs e) {
+			dataGridView1.ClearSelection();
+		}
+
 		private void Empty_All_Labels() {
-			label_FirstName.Text = "Name (First): ";
-			label_NameLast.Text = "Name (Last): ";
+			label_Name.Text = "Resident Name: ";
 			label_UMID.Text = "UMID: ";
 			label_Uniq.Text = "Uniqname: ";
 			label_ItemCat.Text = "Item Category: ";
@@ -50,16 +54,16 @@ namespace LendingLibrary
 			try {
 				DataGridView Grid = (DataGridView)sender;
 				DataGridViewRow item = Grid.Rows[e.RowIndex];
-				label_FirstName.Text = "Name (First): " + item.Cells[0].Value.ToString();
-				label_NameLast.Text = "Name (Last): " + item.Cells[1].Value.ToString();
+				label_Name.Text = "Resident Name: " + item.Cells[0].Value.ToString() + " " + item.Cells[1].Value.ToString();
 				label_UMID.Text = "UMID: " + item.Cells[2].Value.ToString();
 				label_Uniq.Text = "Uniqname: " + item.Cells[3].Value.ToString();
-				label_ItemCat.Text = "Item Category: " + item.Cells[4].Value.ToString();
-				label_ItemDesc.Text = "Item Description: " + item.Cells[5].Value.ToString();
-				label_DueDate.Text = "Due Date: " + item.Cells[6].Value.ToString();
-				label_CheckOut.Text = "Checked Out By: " + item.Cells[7].Value.ToString();
-				label_CheckIn.Text = "Check In Time: " + item.Cells[8].Value.ToString();
-				label_StaffIn.Text = "Checked In By: " + item.Cells[9].Value.ToString();
+				label_CheckOutTime.Text = "Check Out Time: " + item.Cells[4].Value.ToString();
+				label_ItemCat.Text = "Item Category: " + item.Cells[5].Value.ToString();
+				label_ItemDesc.Text = "Item Description: " + item.Cells[6].Value.ToString();
+				label_DueDate.Text = "Due Date: " + item.Cells[7].Value.ToString();
+				label_CheckOut.Text = "Checked Out By: " + item.Cells[8].Value.ToString();
+				label_CheckIn.Text = "Check In Time: " + item.Cells[9].Value.ToString();
+				label_StaffIn.Text = "Checked In By: " + item.Cells[10].Value.ToString();
 			}
 			catch { } // Used if resizing the columns
 		}

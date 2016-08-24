@@ -1,3 +1,6 @@
+v1.1.0
+- Edited in a "Check Out Time"
+- Fixed Last History Clear message
 v1.0.0
 - Version update implemented
 - Small QoL changes with Windows Forms

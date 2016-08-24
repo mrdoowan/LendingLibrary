@@ -28,8 +28,8 @@ namespace LendingLibrary
 		public bool CheckIn_Dialog(DataGridViewRow Item) {
 			string nameFirst = Item.Cells[1].Value.ToString();
 			string nameLast = Item.Cells[2].Value.ToString();
-			string itemCat = Item.Cells[5].Value.ToString();
-			string itemDesc = Item.Cells[6].Value.ToString();
+			string itemCat = Item.Cells[6].Value.ToString();
+			string itemDesc = Item.Cells[7].Value.ToString();
 			label_TopMsg.Text = "Checking in \"" + itemCat + "\"";
 			if (!string.IsNullOrWhiteSpace(itemDesc)) { label_TopMsg.Text += " - " + itemDesc; }
 			label_TopMsg.Text += "\n";
@@ -43,9 +43,10 @@ namespace LendingLibrary
 				string currTime = localTime.ToString(culture);
 				string UMID = Item.Cells[3].Value.ToString();
 				string Uniq = Item.Cells[4].Value.ToString();
-				string dueDate = Item.Cells[7].Value.ToString();
-				string staffOut = Item.Cells[8].Value.ToString();
-				Form1.Item histItem = new Form1.Item(nameFirst, nameLast, UMID, Uniq,
+				string checkOutTime = Item.Cells[5].Value.ToString();
+				string dueDate = Item.Cells[8].Value.ToString();
+				string staffOut = Item.Cells[9].Value.ToString();
+				Form1.Item histItem = new Form1.Item(nameFirst, nameLast, UMID, Uniq, checkOutTime,
 					itemCat, itemDesc, dueDate, staffOut, currTime, staffIn);
 				Form1.HistoryItems.Add(histItem);
 				return true;

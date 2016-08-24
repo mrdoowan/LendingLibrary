@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,15 +56,18 @@ namespace LendingLibrary
 			if (button_clicked) {
 				string Date_Str = Date_To_String((int)numericUpDown_Month.Value,
 					(int)numericUpDown_Day.Value, (int)numericUpDown_Year.Value);
+				// Get current Time stamp for Check Out Time
+				var culture = new CultureInfo("en-US");
+				string checkoutTime = localTime.ToString(culture);
 				// Add to DataGridView
 				DataGridViewButtonColumn button = new DataGridViewButtonColumn();
 				Main_Form.Rows.Insert(0, button, textBox_NameFirst.Text,
 					textBox_NameLast.Text, textBox_UMID.Text, textBox_Uniq.Text,
-					comboBox_ItemCat.Text, textBox_ItemDesc.Text, Date_Str,
-					textBox_StaffOut.Text);
+					checkoutTime, comboBox_ItemCat.Text, textBox_ItemDesc.Text, 
+					Date_Str, textBox_StaffOut.Text);
 				Main_Form.Rows[0].Cells[0].Value = "In";
 				Main_Form.ClearSelection();
-				string dueDate = Main_Form.Rows[0].Cells[7].Value.ToString();
+				string dueDate = Main_Form.Rows[0].Cells[8].Value.ToString();
 				if (Form1.Is_Overdue(dueDate)) {
 					// Mark every cell in the row as Red.
 					foreach (DataGridViewCell cell in Main_Form.Rows[0].Cells) {
@@ -76,20 +80,19 @@ namespace LendingLibrary
 		public void EditItem_Dialog(ref DataGridView Main_Form) {
 			Text = "Edit Item";
 			button_CheckOut.Text = "Edit";
-			string UMID = Main_Form.SelectedRows[0].Cells[3].Value.ToString();
 			textBox_NameFirst.Text = Main_Form.SelectedRows[0].Cells[1].Value.ToString();
 			textBox_NameLast.Text = Main_Form.SelectedRows[0].Cells[2].Value.ToString();
-			textBox_UMID.Text = UMID;
+			textBox_UMID.Text = Main_Form.SelectedRows[0].Cells[3].Value.ToString();
 			textBox_Uniq.Text = Main_Form.SelectedRows[0].Cells[4].Value.ToString();
-			comboBox_ItemCat.Text = Main_Form.SelectedRows[0].Cells[5].Value.ToString();
-			textBox_ItemDesc.Text = Main_Form.SelectedRows[0].Cells[6].Value.ToString();
+			comboBox_ItemCat.Text = Main_Form.SelectedRows[0].Cells[6].Value.ToString();
+			textBox_ItemDesc.Text = Main_Form.SelectedRows[0].Cells[7].Value.ToString();
 			// Parse Dates
-			string Old_Date_Str = Main_Form.SelectedRows[0].Cells[7].Value.ToString();
+			string Old_Date_Str = Main_Form.SelectedRows[0].Cells[8].Value.ToString();
 			string[] Dates = Old_Date_Str.Split('/');
 			numericUpDown_Month.Value = int.Parse(Dates[0]);
 			numericUpDown_Day.Value = int.Parse(Dates[1]);
 			numericUpDown_Year.Value = int.Parse(Dates[2]);
-			textBox_StaffOut.Text = Main_Form.SelectedRows[0].Cells[8].Value.ToString();
+			textBox_StaffOut.Text = Main_Form.SelectedRows[0].Cells[9].Value.ToString();
 			ShowDialog();
 			if (button_clicked) {
 				string Date_Str = Date_To_String((int)numericUpDown_Month.Value,
@@ -99,14 +102,18 @@ namespace LendingLibrary
 				Main_Form.SelectedRows[0].Cells[2].Value = textBox_NameLast.Text;
 				Main_Form.SelectedRows[0].Cells[3].Value = textBox_UMID.Text;
 				Main_Form.SelectedRows[0].Cells[4].Value = textBox_Uniq.Text;
-				Main_Form.SelectedRows[0].Cells[5].Value = comboBox_ItemCat.Text;
-				Main_Form.SelectedRows[0].Cells[6].Value = textBox_ItemDesc.Text;
-				Main_Form.SelectedRows[0].Cells[7].Value = Date_Str;
-				Main_Form.SelectedRows[0].Cells[8].Value = textBox_StaffOut.Text;
+				DateTime localTime = DateTime.Now;
+				var culture = new CultureInfo("en-US");
+				string checkoutTime = localTime.ToString(culture);
+				Main_Form.SelectedRows[0].Cells[5].Value = checkoutTime + " [Edited]";
+				Main_Form.SelectedRows[0].Cells[6].Value = comboBox_ItemCat.Text;
+				Main_Form.SelectedRows[0].Cells[7].Value = textBox_ItemDesc.Text;
+				Main_Form.SelectedRows[0].Cells[8].Value = Date_Str;
+				Main_Form.SelectedRows[0].Cells[9].Value = textBox_StaffOut.Text;
 				foreach (DataGridViewCell cell in Main_Form.SelectedRows[0].Cells) {
 					cell.Style.BackColor = Color.White;
 				}
-				string dueDate = Main_Form.SelectedRows[0].Cells[7].Value.ToString();
+				string dueDate = Main_Form.SelectedRows[0].Cells[8].Value.ToString();
 				if (Form1.Is_Overdue(dueDate)) {
 					// Mark every cell in the row as Red.
 					foreach (DataGridViewCell cell in Main_Form.SelectedRows[0].Cells) {

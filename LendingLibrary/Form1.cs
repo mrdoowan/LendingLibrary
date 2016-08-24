@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace LendingLibrary
 {
@@ -21,7 +22,7 @@ namespace LendingLibrary
 			InitializeComponent();
 		}
 
-		private const string version = "1.0.0";
+		private const string version = "1.1.0";
 		private const string website = "https://github.com/mrdoowan/LendingLibrary/releases";
 		private static bool upgrading = false;
 
@@ -32,6 +33,7 @@ namespace LendingLibrary
 			public string nameLast;
 			public string UMID;
 			public string uniq;
+			public string checkOutTime;
 			public string itemCat;
 			public string itemDesc;
 			public string dueDate;
@@ -41,11 +43,12 @@ namespace LendingLibrary
 
 			// For DataItems
 			public Item(string nameFirst_, string nameLast_, string UMID_, 
-				string uniq_, string cat_, string desc_, string due_, string staffOut_) {
+				string uniq_, string checkOut_, string cat_, string desc_, string due_, string staffOut_) {
 				nameFirst = nameFirst_;
 				nameLast = nameLast_;
 				UMID = UMID_;
 				uniq = uniq_;
+				checkOutTime = checkOut_;
 				itemCat = cat_;
 				itemDesc = desc_;
 				dueDate = due_;
@@ -56,12 +59,13 @@ namespace LendingLibrary
 
 			// For HistoryItems
 			public Item(string nameFirst_, string nameLast_, string UMID_,
-				string uniq_, string cat_, string desc_, string due_, string staffOut_,
-				string inTime_, string staffIn_) {
+				string uniq_, string checkOut_, string cat_, string desc_, string due_, 
+				string staffOut_, string inTime_, string staffIn_) {
 				nameFirst = nameFirst_;
 				nameLast = nameLast_;
 				UMID = UMID_;
 				uniq = uniq_;
+				checkOutTime = checkOut_;
 				itemCat = cat_;
 				itemDesc = desc_;
 				dueDate = due_;
@@ -79,14 +83,14 @@ namespace LendingLibrary
 		#region Functions
 
 		private void Empty_All_Labels() {
-			label_FirstName.Text = "Name (First): ";
-			label_NameLast.Text = "Name (Last): ";
+			label_Name.Text = "Resident Name: ";
 			label_UMID.Text = "UMID: ";
 			label_Uniq.Text = "Uniqname: ";
+			label_CheckOutTime.Text = "Check Out Time: ";
 			label_ItemCat.Text = "Item Category: ";
 			label_ItemDesc.Text = "Item Description: ";
 			label_DueDate.Text = "Due Date: ";
-			label_CheckOut.Text = "Checked Out By: ";
+			label_CheckOutBy.Text = "Checked Out By: ";
 			label_Reminder.Text = "";
 			dataGridView1.ClearSelection();
 		}
@@ -225,15 +229,15 @@ namespace LendingLibrary
 			try {
 				DataGridView Grid = (DataGridView)sender;
 				DataGridViewRow item = Grid.Rows[e.RowIndex];
-				label_FirstName.Text = "Name (First): " + item.Cells[1].Value.ToString();
-				label_NameLast.Text = "Name (Last): " + item.Cells[2].Value.ToString();
+				label_Name.Text = "Resident Name: " + item.Cells[1].Value.ToString() + " " + item.Cells[2].Value.ToString();
 				label_UMID.Text = "UMID: " + item.Cells[3].Value.ToString();
 				label_Uniq.Text = "Uniqname: " + item.Cells[4].Value.ToString();
-				label_ItemCat.Text = "Item Category: " + item.Cells[5].Value.ToString();
-				label_ItemDesc.Text = "Item Description: " + item.Cells[6].Value.ToString();
-				string dueDate = item.Cells[7].Value.ToString();
+				label_CheckOutTime.Text = "Check Out Time: " + item.Cells[5].Value.ToString();
+				label_ItemCat.Text = "Item Category: " + item.Cells[6].Value.ToString();
+				label_ItemDesc.Text = "Item Description: " + item.Cells[7].Value.ToString();
+				string dueDate = item.Cells[8].Value.ToString();
 				label_DueDate.Text = "Due Date: " + dueDate;
-				label_CheckOut.Text = "Checked Out By: " + item.Cells[8].Value.ToString();
+				label_CheckOutBy.Text = "Checked Out By: " + item.Cells[9].Value.ToString();
 				if (Is_Overdue(dueDate)) {
 					label_Reminder.Text = "OVERDUE: " + dueDate + ". Please Email the resident a reminder.";
 				}
@@ -297,11 +301,13 @@ namespace LendingLibrary
 					string lastName = item.Cells[2].Value.ToString();
 					string UMID = item.Cells[3].Value.ToString();
 					string Uniq = item.Cells[4].Value.ToString();
-					string itemCat = item.Cells[5].Value.ToString();
-					string itemDesc = item.Cells[6].Value.ToString();
-					string dueDate = item.Cells[7].Value.ToString();
-					string staffOut = item.Cells[8].Value.ToString();
-					DataItems.Add(new Item(firstName, lastName, UMID, Uniq, itemCat, itemDesc, dueDate, staffOut));
+					string checkoutTime = item.Cells[5].Value.ToString();
+					string itemCat = item.Cells[6].Value.ToString();
+					string itemDesc = item.Cells[7].Value.ToString();
+					string dueDate = item.Cells[8].Value.ToString();
+					string staffOut = item.Cells[9].Value.ToString();
+					DataItems.Add(new Item(firstName, lastName, UMID, Uniq, checkoutTime,
+						itemCat, itemDesc, dueDate, staffOut));
 				}
 				// Now save the items.
 				SaveItems(DataItems, HistoryItems);
@@ -324,20 +330,21 @@ namespace LendingLibrary
 				string lastName = item.nameLast;
 				string UMID = item.UMID;
 				string Uniq = item.uniq;
+				string checkoutTime = item.checkOutTime;
 				string itemCat = item.itemCat;
 				string itemDesc = item.itemDesc;
 				string dueDate = item.dueDate;
 				string staffOut = item.staffOut;
 				// Adding to the dataGridView
 				dataGridView1.Rows.Add(button, firstName, lastName, UMID, 
-					Uniq, itemCat, itemDesc, dueDate, staffOut);
+					Uniq, checkoutTime, itemCat, itemDesc, dueDate, staffOut);
 				int end_index = dataGridView1.Rows.Count - 1;
 				dataGridView1.Rows[end_index].Cells[0].Value = "In";
 			}
 			dataGridView1.ClearSelection();
 			// Check each item if overdue. If so, mark entire row red.
 			foreach (DataGridViewRow item in dataGridView1.Rows) {
-				string dueDate = item.Cells[7].Value.ToString();
+				string dueDate = item.Cells[8].Value.ToString();
 				if (Is_Overdue(dueDate)) {
 					// Mark every cell in the row as Red.
 					foreach (DataGridViewCell cell in item.Cells) {
