@@ -40,6 +40,7 @@ namespace LendingLibrary
 			label_ItemCat.Text = "Item Category: ";
 			label_ItemDesc.Text = "Item Description: ";
 			label_DueDate.Text = "Due Date: ";
+			label_CheckOutTime.Text = "Check Out Time: ";
 			label_CheckOut.Text = "Checked Out By: ";
 			label_CheckIn.Text = "Check In Time: ";
 			label_StaffIn.Text = "Checked In By: ";

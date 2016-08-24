@@ -1,3 +1,5 @@
+v1.1.1
+- Fixed incorrect label when clearing history
 v1.1.0
 - Edited in a "Check Out Time"
 - Fixed Last History Clear message
