@@ -22,7 +22,7 @@ namespace LendingLibrary
 			InitializeComponent();
 		}
 
-		private const string version = "1.1.1";
+		private const string version = "1.1.2";
 		private const string website = "https://github.com/mrdoowan/LendingLibrary/releases";
 		private static bool upgrading = false;
 
@@ -163,9 +163,9 @@ namespace LendingLibrary
 		// For Check In Item.
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
 			DataGridView Grid = (DataGridView)sender;
+			DataGridViewRow item = Grid.Rows[e.RowIndex];
 			if (Grid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0) {
 				//Button Clicked for that row.
-				DataGridViewRow item = Grid.Rows[e.RowIndex];
 				MessageBoxText checkIn_Win = new MessageBoxText();
 				if (checkIn_Win.CheckIn_Dialog(item)) {
 					Grid.Rows.RemoveAt(item.Index);
@@ -174,14 +174,21 @@ namespace LendingLibrary
 					MessageBox.Show("Item checked in!", "Success");
 				}
 			}
+			// Check if item is overdue and display label_reminder
+			if (item.Cells[8].Style.BackColor == Color.LightCoral) {
+				label_Reminder.Text = "OVERDUE: " + item.Cells[8].Value.ToString() + ". Please Email the resident a reminder.";
+			}
+			else {
+				label_Reminder.Text = "";
+			}
 		}
 
 		// Remove an Item.
 		private void button_Remove_Click(object sender, EventArgs e) {
 			if (dataGridView1.SelectedRows.Count > 0) {
 				DataGridViewRow item = dataGridView1.SelectedRows[0];
-				string message = "Do you want to remove Item \"" + item.Cells[5].Value.ToString();
-				if (!string.IsNullOrWhiteSpace(item.Cells[6].Value.ToString())) { message += " - " + item.Cells[6].Value.ToString(); }
+				string message = "Do you want to remove Item \"" + item.Cells[6].Value.ToString();
+				if (!string.IsNullOrWhiteSpace(item.Cells[7].Value.ToString())) { message += " - " + item.Cells[7].Value.ToString(); }
 				message += "\"?\n";
 				message += "NOTE: This is NOT checking in an item. Please press the \"In\" button on each Item if checking in.";
 				if (MessageBox.Show(message, "Reminder", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
