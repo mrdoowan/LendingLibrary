@@ -22,7 +22,7 @@ namespace LendingLibrary
 			InitializeComponent();
 		}
 
-		private const string version = "1.1.2";
+		private const string version = "1.1.1";
 		private const string website = "https://github.com/mrdoowan/LendingLibrary/releases";
 		private static bool upgrading = false;
 
@@ -81,19 +81,6 @@ namespace LendingLibrary
 		public static string LastHistoryClear = "Last History Clear: None";
 
 		#region Functions
-
-		private void Empty_All_Labels() {
-			label_Name.Text = "Resident Name: ";
-			label_UMID.Text = "UMID: ";
-			label_Uniq.Text = "Uniqname: ";
-			label_CheckOutTime.Text = "Check Out Time: ";
-			label_ItemCat.Text = "Item Category: ";
-			label_ItemDesc.Text = "Item Description: ";
-			label_DueDate.Text = "Due Date: ";
-			label_CheckOutBy.Text = "Checked Out By: ";
-			label_Reminder.Text = "";
-			dataGridView1.ClearSelection();
-		}
 
 		// Returns true if overdue
 		// Returns false if fine.
@@ -157,7 +144,6 @@ namespace LendingLibrary
 		private void button_CheckOut_Click(object sender, EventArgs e) {
 			CheckOut checkOut_Win = new CheckOut();
 			checkOut_Win.CheckOut_Dialog(ref dataGridView1);
-			Empty_All_Labels();
 		}
 
 		// For Check In Item.
@@ -170,16 +156,8 @@ namespace LendingLibrary
 				if (checkIn_Win.CheckIn_Dialog(item)) {
 					Grid.Rows.RemoveAt(item.Index);
 					Grid.Refresh();
-					Empty_All_Labels();
 					MessageBox.Show("Item checked in!", "Success");
 				}
-			}
-			// Check if item is overdue and display label_reminder
-			if (item.Cells[8].Style.BackColor == Color.LightCoral) {
-				label_Reminder.Text = "OVERDUE: " + item.Cells[8].Value.ToString() + ". Please Email the resident a reminder.";
-			}
-			else {
-				label_Reminder.Text = "";
 			}
 		}
 
@@ -194,7 +172,6 @@ namespace LendingLibrary
 				if (MessageBox.Show(message, "Reminder", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
 					dataGridView1.Rows.RemoveAt(item.Index);
 					dataGridView1.Refresh();
-					Empty_All_Labels();
 					MessageBox.Show("Item removed.", "Removed");
 				}
 			}
@@ -228,27 +205,11 @@ namespace LendingLibrary
 		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e) {
 			CheckOut EditItem_Win = new CheckOut();
 			EditItem_Win.EditItem_Dialog(ref dataGridView1);
-			Empty_All_Labels();
 		}
 
         // To display the information in the labels
 		private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e) {
-			try {
-				DataGridView Grid = (DataGridView)sender;
-				DataGridViewRow item = Grid.Rows[e.RowIndex];
-				label_Name.Text = "Resident Name: " + item.Cells[1].Value.ToString() + " " + item.Cells[2].Value.ToString();
-				label_UMID.Text = "UMID: " + item.Cells[3].Value.ToString();
-				label_Uniq.Text = "Uniqname: " + item.Cells[4].Value.ToString();
-				label_CheckOutTime.Text = "Check Out Time: " + item.Cells[5].Value.ToString();
-				label_ItemCat.Text = "Item Category: " + item.Cells[6].Value.ToString();
-				label_ItemDesc.Text = "Item Description: " + item.Cells[7].Value.ToString();
-				string dueDate = item.Cells[8].Value.ToString();
-				label_DueDate.Text = "Due Date: " + dueDate;
-				label_CheckOutBy.Text = "Checked Out By: " + item.Cells[9].Value.ToString();
-				if (Is_Overdue(dueDate)) {
-					label_Reminder.Text = "OVERDUE: " + dueDate + ". Please Email the resident a reminder.";
-				}
-			}
+			try { }
 			catch { } // Used if resizing the columns
 		}
 
