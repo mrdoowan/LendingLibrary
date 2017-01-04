@@ -69,6 +69,7 @@ namespace LendingLibrary
 			catch { } // Used if resizing the columns
 		}
 
+        // Will also save an Excel sheet before Clearing
 		private void button_ClearHistory_Click(object sender, EventArgs e) {
 			MessageBoxText clearHist_Win = new MessageBoxText();
 			if (clearHist_Win.ClearHist_Dialog()) {

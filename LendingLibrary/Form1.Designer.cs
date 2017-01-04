@@ -40,10 +40,11 @@
             this.CheckOut = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label_Title = new System.Windows.Forms.Label();
             this.button_CheckOut = new System.Windows.Forms.Button();
-            this.button_Remove = new System.Windows.Forms.Button();
+            this.button_Email = new System.Windows.Forms.Button();
             this.label_TimeRemind = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.button_History = new System.Windows.Forms.Button();
+            this.button_Help = new System.Windows.Forms.Button();
+            this.button_EmailSetting = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -182,15 +183,15 @@
             this.button_CheckOut.UseVisualStyleBackColor = true;
             this.button_CheckOut.Click += new System.EventHandler(this.button_CheckOut_Click);
             // 
-            // button_Remove
+            // button_Email
             // 
-            this.button_Remove.Location = new System.Drawing.Point(125, 62);
-            this.button_Remove.Name = "button_Remove";
-            this.button_Remove.Size = new System.Drawing.Size(100, 23);
-            this.button_Remove.TabIndex = 8;
-            this.button_Remove.Text = "Delete Item";
-            this.button_Remove.UseVisualStyleBackColor = true;
-            this.button_Remove.Click += new System.EventHandler(this.button_Remove_Click);
+            this.button_Email.Location = new System.Drawing.Point(125, 62);
+            this.button_Email.Name = "button_Email";
+            this.button_Email.Size = new System.Drawing.Size(105, 23);
+            this.button_Email.TabIndex = 8;
+            this.button_Email.Text = "Send Emails";
+            this.button_Email.UseVisualStyleBackColor = true;
+            this.button_Email.Click += new System.EventHandler(this.button_Email_Click);
             // 
             // label_TimeRemind
             // 
@@ -201,34 +202,47 @@
             this.label_TimeRemind.Text = "Please make sure that the current Time and Date is correct.";
             this.label_TimeRemind.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // button1
+            // button_History
             // 
-            this.button1.Location = new System.Drawing.Point(869, 459);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 23);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "History";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button_History.Location = new System.Drawing.Point(869, 459);
+            this.button_History.Name = "button_History";
+            this.button_History.Size = new System.Drawing.Size(100, 31);
+            this.button_History.TabIndex = 11;
+            this.button_History.Text = "History";
+            this.button_History.UseVisualStyleBackColor = true;
+            this.button_History.Click += new System.EventHandler(this.button_History_Click);
             // 
-            // button2
+            // button_Help
             // 
-            this.button2.Location = new System.Drawing.Point(757, 459);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(106, 23);
-            this.button2.TabIndex = 10;
-            this.button2.Text = "Help";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button_Help.Location = new System.Drawing.Point(645, 459);
+            this.button_Help.Name = "button_Help";
+            this.button_Help.Size = new System.Drawing.Size(106, 31);
+            this.button_Help.TabIndex = 10;
+            this.button_Help.Text = "Help";
+            this.button_Help.UseVisualStyleBackColor = true;
+            this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
+            // 
+            // button_EmailSetting
+            // 
+            this.button_EmailSetting.Location = new System.Drawing.Point(757, 459);
+            this.button_EmailSetting.Name = "button_EmailSetting";
+            this.button_EmailSetting.Size = new System.Drawing.Size(106, 31);
+            this.button_EmailSetting.TabIndex = 12;
+            this.button_EmailSetting.Text = "Email Settings";
+            this.button_EmailSetting.UseVisualStyleBackColor = true;
+            this.button_EmailSetting.Click += new System.EventHandler(this.button_EmailSetting_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(981, 488);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.button2);
+            this.ClientSize = new System.Drawing.Size(981, 499);
+            this.Controls.Add(this.button_EmailSetting);
+            this.Controls.Add(this.button_History);
+            this.Controls.Add(this.button_Help);
             this.Controls.Add(this.label_TimeRemind);
-            this.Controls.Add(this.button_Remove);
+            this.Controls.Add(this.button_Email);
             this.Controls.Add(this.button_CheckOut);
             this.Controls.Add(this.label_Title);
             this.Controls.Add(this.dataGridView1);
@@ -250,7 +264,7 @@
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private System.Windows.Forms.Label label_Title;
 		private System.Windows.Forms.Button button_CheckOut;
-		private System.Windows.Forms.Button button_Remove;
+		private System.Windows.Forms.Button button_Email;
 		private System.Windows.Forms.Label label_TimeRemind;
 		private System.Windows.Forms.DataGridViewButtonColumn Trash;
 		private System.Windows.Forms.DataGridViewTextBoxColumn NameFirst;
@@ -262,8 +276,9 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn ItemDesc;
 		private System.Windows.Forms.DataGridViewTextBoxColumn DueDate;
 		private System.Windows.Forms.DataGridViewTextBoxColumn CheckOut;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button_History;
+        private System.Windows.Forms.Button button_Help;
+        private System.Windows.Forms.Button button_EmailSetting;
     }
 }
 
