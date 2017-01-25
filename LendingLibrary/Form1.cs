@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
 using System.Globalization;
+using System.Xml.Serialization;
+using System.Net.Mail;
 
 namespace LendingLibrary
 {
@@ -22,7 +24,7 @@ namespace LendingLibrary
 			InitializeComponent();
 		}
 
-		private const string version = "1.1.1";
+		private const string version = "1.2.0";
 		private const string website = "https://github.com/mrdoowan/LendingLibrary/releases";
 		private static bool upgrading = false;
 
@@ -74,6 +76,8 @@ namespace LendingLibrary
 				staffIn = staffIn_;
 			}
 		}
+        
+        public EmailSettings emailSettings = new EmailSettings();
 
 		// Variables for save.
 		// public static List<Item> DataItems = new List<Item>(); // (This isn't needed anymore)
@@ -136,6 +140,56 @@ namespace LendingLibrary
 			}
 		}
 
+        // Functions that need to make the Label visible or not
+        private void Update_OverdueMsgLabel() {
+            if (dataGridView1.SelectedRows.Count > 0) {
+                if (dataGridView1.SelectedRows[0].Cells[0].Style.BackColor == Color.LightCoral) {
+                    // Item is overdue
+                    label_OverdueMsg.Visible = true;
+                    label_OverdueMsg.Text = "Resident has not been Emailed yet for Overdue Item.";
+                    label_OverdueMsg.ForeColor = Color.DarkRed;
+                    return;
+                }
+                else if (dataGridView1.SelectedRows[0].Cells[0].Style.BackColor == Color.LightSeaGreen) {
+                    label_OverdueMsg.Visible = true;
+                    label_OverdueMsg.Text = "Resident has been Emailed today for Overdue Item.";
+                    label_OverdueMsg.ForeColor = Color.DarkGreen;
+                    return;
+                }
+            }
+            label_OverdueMsg.Visible = false;
+        }
+
+        // Send Email with SMTP (with Google)
+        private void send_Email(string firstName, string lastName, string itemCat, string itemDesc,
+            string dueDate, string uniqname) {
+            // Need to replace the Map literals
+            string subject = emailSettings.get_Subject();
+            subject = map_EmailMessage(subject, firstName, lastName, itemCat, itemDesc, dueDate);
+            string body = emailSettings.get_Body();
+            body = map_EmailMessage(body, firstName, lastName, itemCat, itemDesc, dueDate);
+            // Mail Configuration
+            var fromAddress = new MailAddress(
+                emailSettings.get_Address() + "@gmail.com", "Bursley CC");
+            var toAddress = new MailAddress(
+                uniqname + "@umich.edu", firstName + ' ' + lastName);
+            var smtp = new SmtpClient {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(
+                    fromAddress.Address, emailSettings.get_Password())
+            };
+            using (var message = new MailMessage(fromAddress, toAddress) {
+                Subject = subject,
+                Body = body
+            }) {
+                smtp.Send(message);
+            }
+        }
+
 		#endregion
 
 		#region Event Handlers
@@ -161,9 +215,49 @@ namespace LendingLibrary
 			}
 		}
 
+        private string map_EmailMessage(string message, string first, string last,
+            string itemCat, string itemDesc, string dueDate) {
+            message = message.Replace("<1>", first);
+            message = message.Replace("<2>", last);
+            message = message.Replace("<3>", itemCat);
+            message = message.Replace("<4>", itemDesc);
+            message = message.Replace("<5>", dueDate);
+            return message;
+        }
+
         // Emailing Residents for overdue items. Given though, it should be automatically done
         private void button_Email_Click(object sender, EventArgs e) {
-
+            if (dataGridView1.SelectedRows.Count > 0) {
+                string dueDate = dataGridView1.SelectedRows[0].Cells[8].Value.ToString();
+                string firstName = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
+                if (!Is_Overdue(dueDate) && 
+                    MessageBox.Show("The item is not yet overdue. " +
+                    "Are you sure you want to send an Email?", "Prompt",
+                    MessageBoxButtons.YesNo) == DialogResult.No) {
+                    return;
+                }
+                else if (MessageBox.Show("Do you want to send an overdue notice Email to " + firstName + "?",
+                    "Prompt", MessageBoxButtons.YesNo) == DialogResult.No) {
+                    return;
+                }
+                try {
+                    string lastName = dataGridView1.SelectedRows[0].Cells[2].Value.ToString();
+                    string uniqname = dataGridView1.SelectedRows[0].Cells[4].Value.ToString();
+                    string itemCat = dataGridView1.SelectedRows[0].Cells[6].Value.ToString();
+                    string itemDesc = dataGridView1.SelectedRows[0].Cells[7].Value.ToString();
+                    send_Email(firstName, lastName, itemCat, itemDesc, dueDate, uniqname);
+                    // Change color
+                    foreach (DataGridViewCell cell in dataGridView1.SelectedRows[0].Cells) {
+                        cell.Style.BackColor = Color.LightSeaGreen;
+                    }
+                    MessageBox.Show("Email Sent!", "Sent",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex) {
+                    MessageBox.Show("Email failed to send.\nReason: " + ex.Message, "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void button_Help_Click(object sender, EventArgs e) {
@@ -175,24 +269,23 @@ namespace LendingLibrary
                 ". You will have to sign it off. Checking in an item will " +
                 "add it to the History.\n" +
                 "- Double click on an Item to edit the information.\n" +
-                "- You can check the History through the Misc -> History menu strip. " +
+                "- You can check the History through the \"History\" button " +
                 "All items will be logged appropriately with its specified time and date. " +
                 "You are also able to Clear the History.\n" +
-                "- Press the \"Remove\" button to remove an Item without checking it in. Please " +
-                "do not use this unless you made a mistake.\n\n" +
                 "Open-Source: https://github.com/mrdoowan/LendingLibrary \n" +
                 "Created by Steven Duan. Contact sduans@umich.edu for any questions.";
             MessageBox.Show(message, "Help", MessageBoxButtons.OK);
         }
 
         private void button_History_Click(object sender, EventArgs e) {
-            History History_Win = new History();
+            HistoryForm History_Win = new HistoryForm();
             History_Win.History_Dialog();
         }
 
         // This will pull up another Email configuring Email settings
         private void button_EmailSetting_Click(object sender, EventArgs e) {
-
+            EmailSettingForm Email_Win = new EmailSettingForm();
+            Email_Win.EmailSetting_Dialog(ref emailSettings);
         }
 
         // To edit the Checked Out Item
@@ -202,13 +295,15 @@ namespace LendingLibrary
 		}
 
         // To display the information in the labels
-		private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e) {
-			try { }
-			catch { } // Used if resizing the columns
-		}
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e) {
+            try { }
+            catch { } // Used if resizing the columns
+            Update_OverdueMsgLabel();
+        }
 
 		// Save Functions for the Default
 		private void SaveItems(List<Item> dataItems, List<Item> histItems) {
+            // Save current Items
 			using (MemoryStream ms = new MemoryStream()) {
 				BinaryFormatter bf = new BinaryFormatter();
 				bf.Serialize(ms, dataItems);
@@ -218,6 +313,7 @@ namespace LendingLibrary
 				Properties.Settings.Default.SaveDataItems = Convert.ToBase64String(buffer);
 				Properties.Settings.Default.Save();
 			}
+            // Save History Items
 			using (MemoryStream ms = new MemoryStream()) {
 				BinaryFormatter bf = new BinaryFormatter();
 				bf.Serialize(ms, histItems);
@@ -228,30 +324,60 @@ namespace LendingLibrary
 				Properties.Settings.Default.Save();
 			}
 			Properties.Settings.Default.LastHistClear = LastHistoryClear;
-			Properties.Settings.Default.Save();
-		}
+            // Saving Emailsettings
+            Properties.Settings.Default.EmailAddress = emailSettings.get_Address();
+            Properties.Settings.Default.EmailPassword = emailSettings.get_Password();
+            Properties.Settings.Default.EmailSubject = emailSettings.get_Subject();
+            Properties.Settings.Default.EmailBody = emailSettings.get_Body();
+            Properties.Settings.Default.Save();
+        }
 
 		// To load Data Items
 		List<Item> LoadDataItems() {
-			if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.SaveHistoryItems)) {
-				using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Properties.Settings.Default.SaveDataItems))) {
-					BinaryFormatter bf = new BinaryFormatter();
-					return (List<Item>)bf.Deserialize(ms);
-				}
-			}
-			return new List<Item>();
+            try {
+                if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.SaveDataItems)) {
+                    using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(
+                        Properties.Settings.Default.SaveDataItems))) {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        return (List<Item>)bf.Deserialize(ms);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                MessageBox.Show("Error: " + ex.Message + "\nThe application will proceed as normal.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return new List<Item>();
 		}
 
 		// To load History Items
 		List<Item> LoadHistoryItems() {
-			if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.SaveHistoryItems)) {
-				using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Properties.Settings.Default.SaveHistoryItems))) {
-					BinaryFormatter bf = new BinaryFormatter();
-					return (List<Item>)bf.Deserialize(ms);
-				}
-			}
+            try {
+                if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.SaveHistoryItems)) {
+                    using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(
+                        Properties.Settings.Default.SaveHistoryItems))) {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        return (List<Item>)bf.Deserialize(ms);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                MessageBox.Show("Error: " + ex.Message + "\nThe application will proceed as normal.", 
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 			return new List<Item>();
 		}
+
+        // To load EmailSettings
+        EmailSettings LoadEmailSettings() {
+            EmailSettings loadSettings = new EmailSettings(
+                Properties.Settings.Default.EmailAddress,
+                Properties.Settings.Default.EmailPassword,
+                Properties.Settings.Default.EmailSubject,
+                Properties.Settings.Default.EmailBody
+                );
+            return loadSettings;
+        }
 
 		// Save the objects
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
@@ -304,17 +430,48 @@ namespace LendingLibrary
 				dataGridView1.Rows[end_index].Cells[0].Value = "In";
 			}
 			dataGridView1.ClearSelection();
-			// Check each item if overdue. If so, mark entire row red.
-			foreach (DataGridViewRow item in dataGridView1.Rows) {
-				string dueDate = item.Cells[8].Value.ToString();
-				if (Is_Overdue(dueDate)) {
-					// Mark every cell in the row as Red.
-					foreach (DataGridViewCell cell in item.Cells) {
-						cell.Style.BackColor = Color.LightCoral;
-					}
-				}
-			}
+            // Load Email Settings
+            emailSettings = LoadEmailSettings();
 		}
+
+        // Prompt when the form is being shown
+        private void Form1_Shown(object sender, EventArgs e) {
+            // Check each item if overdue. If so, mark entire row red.
+            int overdueItems = 0;
+            foreach (DataGridViewRow item in dataGridView1.Rows) {
+                string dueDate = item.Cells[8].Value.ToString();
+                if (Is_Overdue(dueDate)) {
+                    // Mark every cell in the row as Red.
+                    foreach (DataGridViewCell cell in item.Cells) {
+                        cell.Style.BackColor = Color.LightCoral;
+                        overdueItems++;
+                    }
+                }
+            }
+            // Send Emails right away upon launch.
+            if (overdueItems > 0) {
+                if (MessageBox.Show("There are overdue items! Would you like to send Emails?", "Send Emails",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+                    // Loop through and mark
+                    foreach (DataGridViewRow item in dataGridView1.Rows) {
+                        string dueDate = item.Cells[8].Value.ToString();
+                        if (Is_Overdue(dueDate)) {
+                            // Mark every cell in the row as Red.
+                            foreach (DataGridViewCell cell in item.Cells) {
+                                cell.Style.BackColor = Color.LightSeaGreen;
+                            }
+                            // Send Email function
+                            string firstName = item.Cells[1].Value.ToString();
+                            string lastName = item.Cells[2].Value.ToString();
+                            string uniq = item.Cells[4].Value.ToString();
+                            string itemCat = item.Cells[6].Value.ToString();
+                            string itemDesc = item.Cells[7].Value.ToString();
+                            send_Email(firstName, lastName, itemCat, itemDesc, dueDate, uniq);
+                        }
+                    }
+                }
+            }
+        }
 
         #endregion
     }

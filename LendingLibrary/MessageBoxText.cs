@@ -55,21 +55,17 @@ namespace LendingLibrary
 		}
 
 		// This for Clearing History
-		public bool ClearHist_Dialog() {
+		public string ClearHist_Dialog() {
 			label_TopMsg.Text = "This will delete the entire History.\nPlease sign off to clear the History.";
 			label_BottomMsg.Text = "History Cleared by Staff:";
 			this.Text = "Clear History";
 			button_OK.Text = "Clear";
 			ShowDialog();
 			if (button_clicked) {
-				DateTime localTime = DateTime.Now;
-				var culture = new CultureInfo("en-US");
-				string currTime = localTime.ToString(culture);
-				Form1.LastHistoryClear = "Last History Clear: " + textBox1.Text + " at " + currTime;
-				return true;
+				return textBox1.Text;
 			}
 			else {
-				return false;
+				return null;
 			}
 		}
 

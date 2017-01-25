@@ -45,6 +45,7 @@
             this.button_History = new System.Windows.Forms.Button();
             this.button_Help = new System.Windows.Forms.Button();
             this.button_EmailSetting = new System.Windows.Forms.Button();
+            this.label_OverdueMsg = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -175,9 +176,9 @@
             // 
             // button_CheckOut
             // 
-            this.button_CheckOut.Location = new System.Drawing.Point(13, 62);
+            this.button_CheckOut.Location = new System.Drawing.Point(12, 54);
             this.button_CheckOut.Name = "button_CheckOut";
-            this.button_CheckOut.Size = new System.Drawing.Size(106, 23);
+            this.button_CheckOut.Size = new System.Drawing.Size(105, 31);
             this.button_CheckOut.TabIndex = 6;
             this.button_CheckOut.Text = "Check Out";
             this.button_CheckOut.UseVisualStyleBackColor = true;
@@ -185,11 +186,11 @@
             // 
             // button_Email
             // 
-            this.button_Email.Location = new System.Drawing.Point(125, 62);
+            this.button_Email.Location = new System.Drawing.Point(124, 54);
             this.button_Email.Name = "button_Email";
-            this.button_Email.Size = new System.Drawing.Size(105, 23);
+            this.button_Email.Size = new System.Drawing.Size(105, 31);
             this.button_Email.TabIndex = 8;
-            this.button_Email.Text = "Send Emails";
+            this.button_Email.Text = "Send Email";
             this.button_Email.UseVisualStyleBackColor = true;
             this.button_Email.Click += new System.EventHandler(this.button_Email_Click);
             // 
@@ -204,7 +205,7 @@
             // 
             // button_History
             // 
-            this.button_History.Location = new System.Drawing.Point(869, 459);
+            this.button_History.Location = new System.Drawing.Point(645, 459);
             this.button_History.Name = "button_History";
             this.button_History.Size = new System.Drawing.Size(100, 31);
             this.button_History.TabIndex = 11;
@@ -214,7 +215,7 @@
             // 
             // button_Help
             // 
-            this.button_Help.Location = new System.Drawing.Point(645, 459);
+            this.button_Help.Location = new System.Drawing.Point(863, 459);
             this.button_Help.Name = "button_Help";
             this.button_Help.Size = new System.Drawing.Size(106, 31);
             this.button_Help.TabIndex = 10;
@@ -224,7 +225,7 @@
             // 
             // button_EmailSetting
             // 
-            this.button_EmailSetting.Location = new System.Drawing.Point(757, 459);
+            this.button_EmailSetting.Location = new System.Drawing.Point(751, 459);
             this.button_EmailSetting.Name = "button_EmailSetting";
             this.button_EmailSetting.Size = new System.Drawing.Size(106, 31);
             this.button_EmailSetting.TabIndex = 12;
@@ -232,12 +233,24 @@
             this.button_EmailSetting.UseVisualStyleBackColor = true;
             this.button_EmailSetting.Click += new System.EventHandler(this.button_EmailSetting_Click);
             // 
+            // label_OverdueMsg
+            // 
+            this.label_OverdueMsg.ForeColor = System.Drawing.Color.DarkRed;
+            this.label_OverdueMsg.Location = new System.Drawing.Point(13, 459);
+            this.label_OverdueMsg.Name = "label_OverdueMsg";
+            this.label_OverdueMsg.Size = new System.Drawing.Size(626, 31);
+            this.label_OverdueMsg.TabIndex = 13;
+            this.label_OverdueMsg.Text = "Resident has not been Emailed yet for Overdue Item";
+            this.label_OverdueMsg.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label_OverdueMsg.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(981, 499);
+            this.Controls.Add(this.label_OverdueMsg);
             this.Controls.Add(this.button_EmailSetting);
             this.Controls.Add(this.button_History);
             this.Controls.Add(this.button_Help);
@@ -250,10 +263,13 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(997, 538);
+            this.MinimumSize = new System.Drawing.Size(997, 538);
             this.Name = "Form1";
             this.Text = "Lending Library";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
@@ -279,6 +295,7 @@
         private System.Windows.Forms.Button button_History;
         private System.Windows.Forms.Button button_Help;
         private System.Windows.Forms.Button button_EmailSetting;
+        private System.Windows.Forms.Label label_OverdueMsg;
     }
 }
 
