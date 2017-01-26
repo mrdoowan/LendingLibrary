@@ -17,7 +17,7 @@ namespace LendingLibrary
 			InitializeComponent();
 		}
 
-		private const string version = "1.2.0";
+		private const string version = "1.2.1";
 		private const string website = "https://github.com/mrdoowan/LendingLibrary/releases";
 		private static bool upgrading = false;
 
