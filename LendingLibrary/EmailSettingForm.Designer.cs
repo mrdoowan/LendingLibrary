@@ -37,6 +37,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.button_Save = new System.Windows.Forms.Button();
             this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox_From = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -82,14 +84,14 @@
             // 
             // textBox_Subject
             // 
-            this.textBox_Subject.Location = new System.Drawing.Point(105, 62);
+            this.textBox_Subject.Location = new System.Drawing.Point(105, 90);
             this.textBox_Subject.Name = "textBox_Subject";
             this.textBox_Subject.Size = new System.Drawing.Size(334, 22);
             this.textBox_Subject.TabIndex = 6;
             // 
             // label4
             // 
-            this.label4.Location = new System.Drawing.Point(12, 62);
+            this.label4.Location = new System.Drawing.Point(12, 90);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(87, 22);
             this.label4.TabIndex = 5;
@@ -98,7 +100,7 @@
             // 
             // richTextBox_Body
             // 
-            this.richTextBox_Body.Location = new System.Drawing.Point(105, 90);
+            this.richTextBox_Body.Location = new System.Drawing.Point(105, 118);
             this.richTextBox_Body.Name = "richTextBox_Body";
             this.richTextBox_Body.Size = new System.Drawing.Size(424, 146);
             this.richTextBox_Body.TabIndex = 7;
@@ -106,7 +108,7 @@
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(12, 90);
+            this.label5.Location = new System.Drawing.Point(12, 118);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(87, 22);
             this.label5.TabIndex = 8;
@@ -115,7 +117,7 @@
             // 
             // button_Save
             // 
-            this.button_Save.Location = new System.Drawing.Point(454, 336);
+            this.button_Save.Location = new System.Drawing.Point(454, 370);
             this.button_Save.Name = "button_Save";
             this.button_Save.Size = new System.Drawing.Size(75, 23);
             this.button_Save.TabIndex = 10;
@@ -127,7 +129,7 @@
             // 
             this.textBox4.BackColor = System.Drawing.SystemColors.Control;
             this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox4.Location = new System.Drawing.Point(12, 242);
+            this.textBox4.Location = new System.Drawing.Point(12, 274);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(517, 90);
@@ -136,11 +138,29 @@
     "5>: Due Date";
             this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // textBox_From
+            // 
+            this.textBox_From.Location = new System.Drawing.Point(105, 62);
+            this.textBox_From.Name = "textBox_From";
+            this.textBox_From.Size = new System.Drawing.Size(334, 22);
+            this.textBox_From.TabIndex = 13;
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(12, 62);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(87, 22);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "From";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // EmailSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(541, 371);
+            this.ClientSize = new System.Drawing.Size(541, 405);
+            this.Controls.Add(this.textBox_From);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.button_Save);
             this.Controls.Add(this.label5);
@@ -154,8 +174,8 @@
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(557, 410);
-            this.MinimumSize = new System.Drawing.Size(557, 410);
+            this.MaximumSize = new System.Drawing.Size(557, 444);
+            this.MinimumSize = new System.Drawing.Size(557, 444);
             this.Name = "EmailSettingForm";
             this.Text = "Email Settings";
             this.ResumeLayout(false);
@@ -176,5 +196,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button button_Save;
         private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox textBox_From;
+        private System.Windows.Forms.Label label6;
     }
 }

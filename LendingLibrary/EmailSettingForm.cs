@@ -22,6 +22,7 @@ namespace LendingLibrary
         public void EmailSetting_Dialog(ref EmailSettings settings) {
             textBox_Address.Text = settings.get_Address();
             textBox_Password.Text = settings.get_Password();
+            textBox_From.Text = settings.get_From();
             textBox_Subject.Text = settings.get_Subject();
             richTextBox_Body.Text = settings.get_Body();
             ShowDialog();
@@ -30,6 +31,7 @@ namespace LendingLibrary
                 settings.set_Settings(
                     textBox_Address.Text,
                     textBox_Password.Text,
+                    textBox_From.Text,
                     textBox_Subject.Text,
                     richTextBox_Body.Text
                     );

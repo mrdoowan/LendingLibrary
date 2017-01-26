@@ -13,6 +13,7 @@ namespace LendingLibrary
         // Member variables
         private string emailAddress;
         private string password;
+        private string emailFrom;
         private string emailSubject;
         private string emailBody;
 
@@ -21,8 +22,8 @@ namespace LendingLibrary
 
         // Constructor
         public EmailSettings(string address_, string pw_,
-            string subject_, string body_) {
-            set_Settings(address_, pw_, subject_, body_);
+            string from_, string subject_, string body_) {
+            set_Settings(address_, pw_, from_, subject_, body_);
         }
 
         // Public getter functions
@@ -32,6 +33,10 @@ namespace LendingLibrary
 
         public string get_Password() {
             return password;
+        }
+
+        public string get_From() {
+            return emailFrom;
         }
 
         public string get_Subject() {
@@ -44,9 +49,10 @@ namespace LendingLibrary
 
         // Set entirety functions (copy and paste of constructor)
         public void set_Settings(string address_, string pw_,
-            string subject_, string body_) {
+            string from_, string subject_, string body_) {
             emailAddress = address_;
             password = pw_;
+            emailFrom = from_;
             emailSubject = subject_;
             emailBody = body_;
         }

@@ -106,5 +106,17 @@ namespace LendingLibrary.Properties {
                 this["EmailBody"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EmailFrom {
+            get {
+                return ((string)(this["EmailFrom"]));
+            }
+            set {
+                this["EmailFrom"] = value;
+            }
+        }
     }
 }

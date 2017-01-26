@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Diagnostics;
-using System.Globalization;
-using System.Xml.Serialization;
 using System.Net.Mail;
 
 namespace LendingLibrary
@@ -24,7 +17,7 @@ namespace LendingLibrary
 			InitializeComponent();
 		}
 
-		private const string version = "1.2.0";
+		private const string version = "1.2.1";
 		private const string website = "https://github.com/mrdoowan/LendingLibrary/releases";
 		private static bool upgrading = false;
 
@@ -170,7 +163,7 @@ namespace LendingLibrary
             body = map_EmailMessage(body, firstName, lastName, itemCat, itemDesc, dueDate);
             // Mail Configuration
             var fromAddress = new MailAddress(
-                emailSettings.get_Address() + "@gmail.com", "Bursley CC");
+                emailSettings.get_Address() + "@gmail.com", emailSettings.get_From());
             var toAddress = new MailAddress(
                 uniqname + "@umich.edu", firstName + ' ' + lastName);
             var smtp = new SmtpClient {
@@ -198,21 +191,25 @@ namespace LendingLibrary
 		private void button_CheckOut_Click(object sender, EventArgs e) {
 			CheckOut checkOut_Win = new CheckOut();
 			checkOut_Win.CheckOut_Dialog(ref dataGridView1);
-		}
+            dataGridView1.ClearSelection();
+        }
 
-		// For Check In Item.
-		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
-			DataGridView Grid = (DataGridView)sender;
-			DataGridViewRow item = Grid.Rows[e.RowIndex];
-			if (Grid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0) {
-				//Button Clicked for that row.
-				MessageBoxText checkIn_Win = new MessageBoxText();
-				if (checkIn_Win.CheckIn_Dialog(item)) {
-					Grid.Rows.RemoveAt(item.Index);
-					Grid.Refresh();
-					MessageBox.Show("Item checked in!", "Success");
-				}
-			}
+        // For Check In Item.
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+            try {
+                DataGridView Grid = (DataGridView)sender;
+                DataGridViewRow item = Grid.Rows[e.RowIndex];
+                if (Grid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0) {
+                    //Button Clicked for that row.
+                    MessageBoxText checkIn_Win = new MessageBoxText();
+                    if (checkIn_Win.CheckIn_Dialog(item)) {
+                        Grid.Rows.RemoveAt(item.Index);
+                        Grid.Refresh();
+                        MessageBox.Show("Item checked in!", "Success");
+                    }
+                }
+            }
+            catch { } // Any implicit clicking exception errors
 		}
 
         private string map_EmailMessage(string message, string first, string last,
@@ -258,6 +255,7 @@ namespace LendingLibrary
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            dataGridView1.ClearSelection();
         }
 
         private void button_Help_Click(object sender, EventArgs e) {
@@ -275,23 +273,28 @@ namespace LendingLibrary
                 "Open-Source: https://github.com/mrdoowan/LendingLibrary \n" +
                 "Created by Steven Duan. Contact sduans@umich.edu for any questions.";
             MessageBox.Show(message, "Help", MessageBoxButtons.OK);
+            dataGridView1.ClearSelection();
         }
 
         private void button_History_Click(object sender, EventArgs e) {
             HistoryForm History_Win = new HistoryForm();
             History_Win.History_Dialog();
+            dataGridView1.ClearSelection();
         }
 
         // This will pull up another Email configuring Email settings
         private void button_EmailSetting_Click(object sender, EventArgs e) {
             EmailSettingForm Email_Win = new EmailSettingForm();
             Email_Win.EmailSetting_Dialog(ref emailSettings);
+            dataGridView1.ClearSelection();
         }
 
         // To edit the Checked Out Item
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e) {
-			CheckOut EditItem_Win = new CheckOut();
-			EditItem_Win.EditItem_Dialog(ref dataGridView1);
+            if (dataGridView1.SelectedRows.Count > 0) {
+                CheckOut EditItem_Win = new CheckOut();
+                EditItem_Win.EditItem_Dialog(ref dataGridView1);
+            }
 		}
 
         // To display the information in the labels
@@ -327,6 +330,7 @@ namespace LendingLibrary
             // Saving Emailsettings
             Properties.Settings.Default.EmailAddress = emailSettings.get_Address();
             Properties.Settings.Default.EmailPassword = emailSettings.get_Password();
+            Properties.Settings.Default.EmailFrom = emailSettings.get_From();
             Properties.Settings.Default.EmailSubject = emailSettings.get_Subject();
             Properties.Settings.Default.EmailBody = emailSettings.get_Body();
             Properties.Settings.Default.Save();
@@ -373,6 +377,7 @@ namespace LendingLibrary
             EmailSettings loadSettings = new EmailSettings(
                 Properties.Settings.Default.EmailAddress,
                 Properties.Settings.Default.EmailPassword,
+                Properties.Settings.Default.EmailFrom,
                 Properties.Settings.Default.EmailSubject,
                 Properties.Settings.Default.EmailBody
                 );
@@ -449,27 +454,33 @@ namespace LendingLibrary
                 }
             }
             // Send Emails right away upon launch.
-            if (overdueItems > 0) {
-                if (MessageBox.Show("There are overdue items! Would you like to send Emails?", "Send Emails",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
-                    // Loop through and mark
-                    foreach (DataGridViewRow item in dataGridView1.Rows) {
-                        string dueDate = item.Cells[8].Value.ToString();
-                        if (Is_Overdue(dueDate)) {
-                            // Mark every cell in the row as Red.
-                            foreach (DataGridViewCell cell in item.Cells) {
-                                cell.Style.BackColor = Color.LightSeaGreen;
+            try {
+                if (overdueItems > 0) {
+                    if (MessageBox.Show("There are overdue items! Would you like to send Emails?", "Send Emails",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+                        // Loop through and mark
+                        foreach (DataGridViewRow item in dataGridView1.Rows) {
+                            string dueDate = item.Cells[8].Value.ToString();
+                            if (Is_Overdue(dueDate)) {
+                                // Mark every cell in the row as Red.
+                                foreach (DataGridViewCell cell in item.Cells) {
+                                    cell.Style.BackColor = Color.LightSeaGreen;
+                                }
+                                // Send Email function
+                                string firstName = item.Cells[1].Value.ToString();
+                                string lastName = item.Cells[2].Value.ToString();
+                                string uniq = item.Cells[4].Value.ToString();
+                                string itemCat = item.Cells[6].Value.ToString();
+                                string itemDesc = item.Cells[7].Value.ToString();
+                                send_Email(firstName, lastName, itemCat, itemDesc, dueDate, uniq);
                             }
-                            // Send Email function
-                            string firstName = item.Cells[1].Value.ToString();
-                            string lastName = item.Cells[2].Value.ToString();
-                            string uniq = item.Cells[4].Value.ToString();
-                            string itemCat = item.Cells[6].Value.ToString();
-                            string itemDesc = item.Cells[7].Value.ToString();
-                            send_Email(firstName, lastName, itemCat, itemDesc, dueDate, uniq);
                         }
                     }
                 }
+            }
+            catch (Exception ex) {
+                MessageBox.Show("Emails couldn't be sent! Proceeding to Main window\nReason: " + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

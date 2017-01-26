@@ -1,3 +1,6 @@
+v1.2.1
+- Bug fixing some Exception handlers
+- "Email From" should be in Email Settings
 v1.2.0
 - Implemented sending Emails
 - Simplified UI of the Main Form
